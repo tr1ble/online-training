@@ -31,7 +31,7 @@ public class CommonAddController {
     public ResponseEntity register(@RequestBody(required = false) User user) {
         Optional<User> userOptional = userService.getUserByLogin(user.getLogin());
         if(!userOptional.isPresent()) {
-            user.setRole(Role.valueOf("ROLE_STUDENT"));
+            user.setRole(Role.valueOf("ROLE_DEFAULT"));
             userService.add(user);
             return new ResponseEntity<>(null, HttpStatus.OK);
         } else {

@@ -9,6 +9,7 @@ import by.bsuir.courseproject.service.task.TaskService;
 import by.bsuir.courseproject.service.trainer.TrainerService;
 import by.bsuir.courseproject.service.user.UserService;
 import org.apache.coyote.Response;
+import org.apache.tomcat.jni.Error;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,7 +36,6 @@ import java.util.Optional;
 
 
 @RestController
-@Component
 public class AdminAddController {
 
     private TrainerService trainerService;
@@ -66,10 +68,11 @@ public class AdminAddController {
     }
 
     @RequestMapping(value = {"/task"}, method = RequestMethod.POST)
-    public Task addTask(@RequestBody(required = false) Task task) {
-
+    public Task addTask(@RequestBody(required = false) @Valid Task task, Errors errors) {
+        if(errors.hasErrors()) {
+            return null;
+        }
         return taskService.add(task);
-
     }
 
     @RequestMapping(value = {"/trainer"}, method = RequestMethod.POST)

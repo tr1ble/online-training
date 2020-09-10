@@ -21,7 +21,6 @@ import java.util.Optional;
 
 
 @RestController
-@Component
 public class CommonGetController {
 
     private StudentService studentService;
@@ -81,8 +80,8 @@ public class CommonGetController {
 
     @RequestMapping(value = "/completedtasks/findByCourse/{id}", method = {RequestMethod.POST, RequestMethod.GET})
     public ResponseEntity<List<CompletedTask>> getCompletedTasksByCourse(@PathVariable int id) {
-        Optional<Course> courseOptional = courseService.findById(id);
-        return courseOptional.map(course -> ResponseEntity.ok(completedTaskService.findByCourse(course))).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        Optional<Task> taskOptional = taskService.findById(id);
+        return taskOptional.map(task -> ResponseEntity.ok(completedTaskService.findByTask(task))).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
 

@@ -1,5 +1,6 @@
 package by.bsuir.courseproject.entites;
 
+import by.bsuir.courseproject.entites.files.DatabaseFile;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -13,8 +14,13 @@ import javax.validation.constraints.Min;
 @Table(name="completed_task")
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompletedTask extends Task {
+public class CompletedTask {
 
+   @Id
+   @Basic
+   @Column(name="id", nullable = false)
+   @GeneratedValue(strategy= GenerationType.IDENTITY)
+   private int id;
 
    @Basic
    @Column(name="mark", nullable = false)
@@ -31,4 +37,14 @@ public class CompletedTask extends Task {
    @OnDelete(action = OnDeleteAction.CASCADE)
    private Student student;
 
+   @OneToOne
+   @JoinColumn(name="file_id")
+   @OnDelete(action = OnDeleteAction.CASCADE)
+   private DatabaseFile databaseFile;
+
+   @ManyToOne
+   @JoinColumn(name="task_id")
+   @OnDelete(action = OnDeleteAction.CASCADE)
+   private Task task;
 }
+

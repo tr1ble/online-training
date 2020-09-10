@@ -3,6 +3,7 @@ package by.bsuir.courseproject.service.completedtask;
 import by.bsuir.courseproject.entites.CompletedTask;
 import by.bsuir.courseproject.entites.Course;
 import by.bsuir.courseproject.entites.Student;
+import by.bsuir.courseproject.entites.Task;
 import by.bsuir.courseproject.repository.CompletedTaskRepository;
 
 
@@ -55,8 +56,8 @@ public class CompletedTaskServiceImpl implements CompletedTaskService {
     }
 
     @Override
-    public List<CompletedTask> findByCourse(Course course)  {
-        return completedTaskRepository.findByCourse(course);
+    public List<CompletedTask> findByTask(Task task)  {
+        return completedTaskRepository.findByTask(task);
     }
 
     @Override

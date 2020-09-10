@@ -1,7 +1,7 @@
 package by.bsuir.courseproject.config;
 
 import by.bsuir.courseproject.config.security.SecurityConfig;
-import by.bsuir.courseproject.service.ServiceConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
@@ -9,10 +9,8 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 
 import javax.servlet.Filter;
 
+@Slf4j
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(WebConfig.class);
-
 
     @Override
     protected String[] getServletMappings() {
@@ -21,7 +19,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[] { RootConfig.class, SecurityConfig.class, ServiceConfig.class};
+        return new Class<?>[] { RootConfig.class, SecurityConfig.class};
     }
 
     @Override
@@ -31,7 +29,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
     @Override
     protected Filter[] getServletFilters() {
-        LOGGER.info("Setting up filters");
+        logger.info("Setting up filters");
         return new Filter[] {
                 new HiddenHttpMethodFilter()
         };
