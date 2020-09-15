@@ -12,10 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +21,9 @@ import java.util.Optional;
 @RestController
 public class AuthenticationController {
 
+    private static final String LOGIN = "login";
+    private static final String TOKEN = "token";
+    private static final String ROLE = "role";
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
@@ -37,7 +37,7 @@ public class AuthenticationController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @PostMapping(value = "/login")
     public ResponseEntity login(@RequestBody AuthenticationRequestDto authenticationRequestDto) {
         try {
             String login = authenticationRequestDto.getLogin();
@@ -49,9 +49,9 @@ public class AuthenticationController {
             }
             String token = jwtTokenProvider.newToken(login, user.get().getRole());
             Map<Object, Object> response = new HashMap<>();
-            response.put("login", login);
-            response.put("token", token);
-            response.put("role", user.get().getRole());
+            response.put(LOGIN, login);
+            response.put(TOKEN, token);
+            response.put(ROLE, user.get().getRole());
             return ResponseEntity.ok(response);
         } catch (AuthenticationException ex) {
             throw new BadCredentialsException("Invalid password");

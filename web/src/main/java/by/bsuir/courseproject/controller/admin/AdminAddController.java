@@ -56,7 +56,7 @@ public class AdminAddController {
     }
 
 
-    @RequestMapping(value = {"/course"}, method = RequestMethod.POST)
+    @PostMapping(value = {"/course"}, consumes = "application/json")
     public Course addCourse(@RequestBody(required = false) Course course) {
         int trainerId = course.getTrainer().getId();
         Optional<Trainer> trainerOptional = trainerService.getById(trainerId);
@@ -67,7 +67,7 @@ public class AdminAddController {
         return courseService.add(course);
     }
 
-    @RequestMapping(value = {"/task"}, method = RequestMethod.POST)
+    @PostMapping(value = {"/task"}, consumes = "application/json")
     public Task addTask(@RequestBody(required = false) @Valid Task task, Errors errors) {
         if(errors.hasErrors()) {
             return null;
@@ -75,7 +75,7 @@ public class AdminAddController {
         return taskService.add(task);
     }
 
-    @RequestMapping(value = {"/trainer"}, method = RequestMethod.POST)
+    @PostMapping(value = {"/trainer"}, consumes = "application/json")
     public ResponseEntity<Trainer> addTrainer(@RequestBody(required = false) Trainer trainer) {
         Optional<User> userOptional = userService.getUserByLogin(trainer.getUser().getLogin());
         if(userOptional.isPresent()) {
@@ -87,7 +87,7 @@ public class AdminAddController {
     }
 
 
-    @RequestMapping(value = {"/user"}, method = RequestMethod.POST)
+    @PostMapping(value = {"/user"}, consumes = "application/json")
     public ResponseEntity addUser(@RequestBody(required = false) User user) {
         Optional<User> userOptional = userService.getUserByLogin(user.getLogin());
         if(!userOptional.isPresent()) {
@@ -99,13 +99,13 @@ public class AdminAddController {
 
     }
 
-    @RequestMapping(value = {"/completedtask"}, method = RequestMethod.POST)
+    @PostMapping(value = {"/completedtask"}, consumes = "application/json")
     public CompletedTask addCompletedTask(@RequestBody(required = false) CompletedTask completedTask) {
         return completedTaskService.add(completedTask);
 
     }
 
-    @RequestMapping(value = {"/student"}, method = RequestMethod.POST)
+    @PostMapping(value = {"/student"}, consumes = "application/json")
     public Student addStudent(@RequestBody(required = false) Student student) {
         return studentService.add(student);
 

@@ -1,5 +1,6 @@
 package by.bsuir.courseproject.entites;
 
+import by.bsuir.courseproject.entites.files.DatabaseFile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -57,21 +58,10 @@ public class Course implements Identifable {
     @JsonIgnore
     private List<Task> taskList;
 
-    public Course(int id) {
-        this.id=id;
-    }
+    @OneToOne
+    @JoinColumn(name="file_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private DatabaseFile image;
 
-    public Course(@NonNull Trainer trainer, @NonNull String title, @NonNull Date startDate, @NonNull Date endDate) {
-        this.trainer = trainer;
-        this.title = title;
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
-
-
-    @Override
-    public Integer getId() {
-        return id;
-    }
 }
 

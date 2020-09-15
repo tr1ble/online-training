@@ -11,31 +11,32 @@ import by.bsuir.courseproject.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
 public class CommonAddController {
 
+    private static final String ROLE_DEFAULT = "ROLE_DEFAULT";
+    private static final String ERROR_MESSAGE = "This login is already taken";
+
     private UserService userService;
+
     @Autowired
     public CommonAddController(UserService userService) {
         this.userService = userService;
     }
 
-    @RequestMapping(value = {"/register"}, method = RequestMethod.POST)
+    @PostMapping(value = {"/register"}, consumes = "application/json")
     public ResponseEntity register(@RequestBody(required = false) User user) {
         Optional<User> userOptional = userService.getUserByLogin(user.getLogin());
         if(!userOptional.isPresent()) {
-            user.setRole(Role.valueOf("ROLE_DEFAULT"));
+            user.setRole(Role.valueOf(ROLE_DEFAULT));
             userService.add(user);
             return new ResponseEntity<>(null, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("This login is already taken", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(ERROR_MESSAGE, HttpStatus.NOT_FOUND);
         }
 
     }

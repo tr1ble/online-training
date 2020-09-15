@@ -27,15 +27,6 @@ import java.util.Optional;
 @RestController
 public class AdminEditController {
 
-    private final static Logger LOG = LoggerFactory.getLogger(AdminEditController.class.getName());
-
-    private static final String COURSE_ID= "courseId";
-    private static final String TRAINER_ID = "trainerId";
-    private static final String TASK_ID = "taskId";
-    private static final String STUDENT_ID = "studentId";
-    private static final String COMPLETED_TASK_ID = "completedTaskId";
-    private static final String USERNAME = "username";
-
     private final TrainerService trainerService;
     private final CourseService courseService;
     private final TaskService taskService;

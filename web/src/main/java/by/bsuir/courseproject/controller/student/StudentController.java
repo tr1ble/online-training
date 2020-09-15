@@ -17,8 +17,7 @@ import java.util.Map;
 @RestController
 public class StudentController {
 
-    private static final String STUDENT_ID = "studentId";
-
+    private static final String STUDENT_ID = "student_id";
     private final StudentService studentService;
     private final DatabaseFileService databaseFileService;
 
@@ -28,14 +27,14 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @PostMapping(value = {"/registration"})
+    @PostMapping(value = {"/registration"}, consumes = "application/json")
     public Student registration(@RequestBody Student student)  {
         return studentService.add(student);
     }
 
-    @PostMapping(value = {"/unregister"})
+    @PostMapping(value = {"/unregister"}, consumes = "application/json")
     public void unregister(@RequestBody Map<String, Integer> data)  {
-        studentService.remove(data.get("student_id"));
+        studentService.remove(data.get(STUDENT_ID));
     }
 
 
