@@ -48,38 +48,38 @@ public class AdminDeleteController {
     }
 
 
-    @RequestMapping(value = {"/course/{courseId}"}, method = RequestMethod.DELETE)
-    public ResponseEntity deleteCourse(@PathVariable(COURSE_ID) int courseId) {
+    @DeleteMapping(value = {"/course/{courseId}"})
+    public ResponseEntity<Integer> deleteCourse(@PathVariable(COURSE_ID) int courseId) {
         courseService.remove(courseId);
         return ResponseEntity.ok(courseId);
     }
 
-    @RequestMapping(value = {"/task/{taskId}"}, method = RequestMethod.DELETE)
-    public ResponseEntity deleteTask(@PathVariable(TASK_ID) int taskId, Model model)  {
+    @DeleteMapping(value = {"/task/{taskId}"})
+    public ResponseEntity<Integer> deleteTask(@PathVariable(TASK_ID) int taskId)  {
         taskService.remove(taskId);
         return ResponseEntity.ok(taskId);
     }
 
-    @RequestMapping(value = {"/trainer/{trainerId}"}, method = RequestMethod.DELETE)
-    public ResponseEntity deleteTrainer(@PathVariable(TRAINER_ID) int trainerId) {
+    @DeleteMapping(value = {"/trainer/{trainerId}"})
+    public ResponseEntity<Integer> deleteTrainer(@PathVariable(TRAINER_ID) int trainerId) {
         trainerService.remove(trainerId);
         return ResponseEntity.ok(trainerId);
     }
 
-    @RequestMapping(value = {"/user/{username}"}, method = RequestMethod.DELETE)
-    public ResponseEntity deleteUser(@PathVariable(USERNAME) String login) {
+    @DeleteMapping(value = {"/user/{username}"})
+    public ResponseEntity<String> deleteUser(@PathVariable(USERNAME) String login) {
         userService.removeByLogin(login);
         return ResponseEntity.ok(login);
     }
 
-    @RequestMapping(value = {"/completedTask/{completedTaskId}"}, method = RequestMethod.DELETE)
-    public ResponseEntity deleteCompletedTask(@PathVariable(COMPLETED_TASK_ID) int completedTaskId) {
+    @DeleteMapping(value = {"/completedTask/{completedTaskId}"})
+    public ResponseEntity<Integer> deleteCompletedTask(@PathVariable(COMPLETED_TASK_ID) int completedTaskId) {
         completedTaskService.remove(completedTaskId);
         return ResponseEntity.ok(completedTaskId);
     }
 
-    @RequestMapping(value = {"/student/{studentId}"}, method = RequestMethod.DELETE)
-    public ResponseEntity deleteStudent(@PathVariable(STUDENT_ID) int studentId) {
+    @DeleteMapping(value = {"/student/{studentId}"})
+    public ResponseEntity<Integer> deleteStudent(@PathVariable(STUDENT_ID) int studentId) {
         studentService.remove(studentId);
         return ResponseEntity.ok(studentId);
     }

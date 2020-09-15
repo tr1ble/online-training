@@ -25,13 +25,13 @@ public class AdminGetController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @RequestMapping(value = "/users", method = {RequestMethod.POST, RequestMethod.GET})
+    @GetMapping(value = "/users", produces = "application/json")
     public ResponseEntity<List<User>> getUsers() {
         List<User> users = userService.getAll();
         return ResponseEntity.ok(users);
     }
 
-    @RequestMapping(value = "/user/{username}", method = {RequestMethod.POST, RequestMethod.GET})
+    @GetMapping(value = "/user/{username}", produces = "application/json")
     public ResponseEntity<User> getTrainerById(@PathVariable String username) {
         Optional<User> userOptional = userService.getUserByLogin(username);
         return userOptional.map((user) -> new ResponseEntity<>(user, HttpStatus.OK)
@@ -39,7 +39,7 @@ public class AdminGetController {
     }
 
 
-    @RequestMapping(value = "/users/findByRole/{role}", method = {RequestMethod.POST, RequestMethod.GET})
+    @GetMapping(value = "/users/findByRole/{role}", produces = "application/json")
     public ResponseEntity<List<User>> getUsersByRole(@PathVariable String role) {
         return ResponseEntity.ok(userService.findByRole(role));
     }
