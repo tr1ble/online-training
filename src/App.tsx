@@ -4,7 +4,7 @@ import './App.css';
 import { inject, observer } from "mobx-react";
 import { Router, Route, Switch, RouteProps } from 'react-router-dom';
 
-function App() {
+function App(): React.ReactNode {
   return (
     <div className="App">
       <header className="App-header">
