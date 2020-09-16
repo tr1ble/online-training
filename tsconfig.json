@@ -24,10 +24,11 @@
     "experimentalDecorators": true,
     "incremental": true,
     "noFallthroughCasesInSwitch": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "baseUrl": "./src"
   },
   "include": [
-    "src/**/*"
+    "src"
   ],
   "exclude": [
     "node_modules",
