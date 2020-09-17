@@ -1,28 +1,24 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+
 import { inject, observer } from "mobx-react";
 import { Router, Route, Switch, RouteProps } from 'react-router-dom';
+import { Alert } from 'antd'
 
-function App(): React.ReactNode {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import * as pages from 'pages';
+import history from 'global/history'
+
+interface AppProps {
+  authState?: any; 
+}
+
+@inject('authState')
+@observer
+class App extends React.PureComponent<AppProps> {
+  getRoutes() {
+    
+  }
 }
 
 export default App;
