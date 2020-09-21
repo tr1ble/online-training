@@ -1,20 +1,20 @@
 import { inject, observer } from 'mobx-react';
 import React from 'react'
 
-interface AuthPageProps {
+interface PageNotFoundProps {
     authState?: any;
 }
 
 @inject('authState')
 @observer
-class AuthPage extends React.PureComponent<AuthPageProps> {
+class PageNotFound extends React.PureComponent<PageNotFoundProps> {
     render() {
         return (
             <div>
-                Login page
+                PageNotFound
             </div>
         )
     }
 }
 
-export default AuthPage;
+export default PageNotFound;

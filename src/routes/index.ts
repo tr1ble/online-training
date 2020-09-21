@@ -1,5 +1,7 @@
 import authRoutes from "./authRoutes";
+import mainRoutes from "./mainRoutes";
 
 export default {
-    authRoutes: authRoutes
+    authRoutes: authRoutes,
+    mainRoutes: mainRoutes
 };

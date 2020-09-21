@@ -1,15 +1,28 @@
-@import '~antd/dist/antd.css';
-
 .appContainer {
   display: flex;
   min-height: 100vh;
   justify-content: center;
-  background-color: black;
- /*  align-items: center; */
+  background-color: rgba(0, 0, 0, 0.85);
+  -webkit-font-smoothing: antialiased;
 }
 
 .pageContainer {
   min-height: 100vh;
   width: 100%;
   display: flex;
+  color: #2c2e31;
+}
+
+.alertContainer {
+  background-color: rgba(255, 255, 255, 0.945);
+  position: absolute;
+  min-height: 120px;
+  font-size: 18px;
+  box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.445);
+  color: black;
+  border: 2px solid rgba(0, 0, 0, 0.308);
+  border-radius: 10px;
+  min-width: 420px;
+  z-index: 150;
+  margin-top: 15%;
 }

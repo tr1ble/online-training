@@ -1,8 +1,4 @@
-import { Route } from 'react-router-dom'
-
-import pages from 'pages/AuthPage'
 import * as page from 'pages'
-import AuthPage from 'pages/AuthPage';
 
 interface RouteType {
     route: any;
@@ -11,7 +7,7 @@ interface RouteType {
 }
 
 const authRoutes: RouteType[] = [
-    { exact: true, route: pages, path:'/'}
+    { exact: true, route: page.HomePage, path:'/'}
 ];
 
 export default authRoutes;

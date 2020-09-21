@@ -1,6 +1,4 @@
-import { action, observable, runInAction, configure } from "mobx";
-
-configure({ enforceActions: 'observed' });
+//configure({ enforceActions: 'observed' });
 
 class ProfileState {
  
