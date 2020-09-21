@@ -1,0 +1,59 @@
+
+.login-popup
+    position: relative
+    top: 8rem
+    right: 1.2rem
+    margin: .75rem 1.25rem
+    width: 215px
+    z-index: 2500
+    width: 300px
+    padding: 20px
+    //transform: translate(-50%, -50%)
+    //background: rgba(0,0,0,.5)
+    background: #2c2e31
+    box-sizing: border-box;
+    box-shadow: 0 15px 25px rgba(0,0,0,.6)
+    border-radius: 10px
+    @media only screen and (min-width: 40.063em)
+        position: relative
+
+.login-popup h2 
+  margin: 0 0 30px
+  padding: 0
+  color: #fff
+  text-align: center
+
+.login-popup .user-box 
+  position: relative
+
+.login-popup .user-box input 
+  width: 100%
+  padding: 10px 0
+  font-size: 16px
+  color: #fff
+  margin-bottom: 30px
+  border: none
+  border-bottom: 1px solid #fff
+  outline: none
+  background: transparent
+
+.login-popup .user-box label 
+  position: absolute
+  top: 0
+  left: 0
+  padding: 10px 0
+  font-size: 16px
+  color: #fff
+  pointer-events: none
+  transition: .5s
+
+.login-popup .user-box input:focus ~ label
+  top: -20px
+  left: 0
+  color: #f6e770
+  font-size: 12px
+.login-popup .user-box input:valid ~ label 
+  top: -20px
+  left: 0
+  color: #f6e770
+  font-size: 12px

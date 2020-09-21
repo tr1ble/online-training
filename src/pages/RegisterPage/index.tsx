@@ -7,13 +7,13 @@ import "./style.sass";
 import { observable, runInAction, action } from 'mobx';
 import { LoginForm } from 'component';
 
-interface AuthPageProps {
+interface RegisterPageProps {
     authState?: any;
 }
 
 @inject('authState')
 @observer
-class AuthPage extends React.PureComponent<AuthPageProps> {
+class RegisterPage extends React.PureComponent<RegisterPageProps> {
 
     @observable isLoginVisible = false;
     @observable activeClass:string= 'menuRoot';
@@ -104,4 +104,4 @@ class AuthPage extends React.PureComponent<AuthPageProps> {
     };
 }
 
-export default AuthPage;
+export default RegisterPage;
