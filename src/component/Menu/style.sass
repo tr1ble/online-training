@@ -1,0 +1,169 @@
+aside 
+    display: block
+
+.menu 
+    position: absolute;
+    top: 3.25rem
+    width: 100%
+    min-height: 100%
+    transition: right .33s ease-out,left .33s ease-out;
+    letter-spacing: 1px
+    z-index: 30
+    @media only screen and (min-width: 40.0625em)
+        top: 4rem
+        width: 50%
+        position: fixed
+        height: auto
+        overflow: hidden
+        overflow-y: auto
+        bottom: 0
+    @media only screen and (min-width: 64.0625em)
+        font-size: .875em;
+        width: 18.75rem
+        top: 0
+
+.menu--nav 
+    left: 0;
+    background: #333
+    color: rgba(255,255,255,.5)
+
+
+
+*, :after, :before 
+    box-sizing: border-box
+
+
+
+
+.menu-header 
+    height: 4rem
+    position: relative
+    margin-bottom: 3rem
+    border-bottom: 1px solid rgba(216,216,216,.2)
+
+
+.menu-logo
+    transform: translateY(-50%)
+    position: relative
+    top: 50%
+    padding-left: 2rem
+    max-width: 11rem
+    display: none
+    @media only screen and (min-width: 64.0625em)
+        display: inline-block;
+
+.menu-title 
+    padding: 0 0 2rem 1rem
+
+nav 
+    display: block;
+
+h1, h2, h3, h4, h5 
+    font-size: inherit
+    letter-spacing: 2px
+
+blockquote, figure, h1, h2, h3, h4, ol, p, ul 
+    margin: 0
+    padding: 0
+
+b, h1, h2, h3, h4, h5, strong 
+    font-weight: 400
+
+h4 
+    display: block
+    margin-block-start: 1.33em
+    margin-block-end: 1.33em
+    margin-inline-start: 0px
+    margin-inline-end: 0px
+    font-weight: bold
+
+a 
+    text-decoration: none
+
+.nav-inner-item 
+    font-family: "Proxima Nova"
+    overflow: hidden
+    &:hover:before
+        left: 0
+    &:after, &:before 
+        position: absolute
+        transition: all .33s ease-out .2s
+    &:before 
+        content: ""
+        top: 0
+        bottom: 0
+        left: -1em
+        width: .25rem
+        background: #f2f2f2
+    &:hover:after
+        right: -3px
+    &:after 
+        content: ""
+        font-family: dashboard
+        top: 50%
+        height: 1em
+        line-height: 1em
+        font-size: 2em
+        margin-top: -.5em
+        right: -1em
+        color: #f2f2f2
+    &:hover
+        color: #fff
+
+.nav-inner-item.active
+    &:after 
+        right: -3px
+
+.nav-inner-item 
+    &:hover
+        i
+            transition: inherit
+            color: #f6e767
+
+.ico 
+    display: inline-block
+    font-family: dashboard
+    font-style: normal
+    font-weight: 400
+    speak: none
+    width: 1em
+    text-align: center
+    font-variant: normal
+    line-height: 1em
+    -webkit-font-smoothing: antialiased
+
+
+.menu-item 
+    position: relative
+    transition: all .33s ease-out
+    cursor: pointer
+    white-space: nowrap
+    display: flex
+    align-items: center
+    padding: 1rem 2rem 1rem .875rem
+
+.menu-item i 
+    width: 1.125rem
+    margin-right: .875rem
+    text-align: center
+
+
+
+@media only screen and (min-width: 64.0625em) 
+    &::-webkit-scrollbar 
+        width: .5rem
+        height: .5rem
+    &::-webkit-scrollbar-thumb 
+        background: #333
+        border-radius: 20px
+    &::-webkit-scrollbar-track 
+        background: #d8d8d8
+        border-radius: 20px
+
+        
+    
+
+
+
+
+

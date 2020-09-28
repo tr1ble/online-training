@@ -3,5 +3,5 @@ import mainRoutes from "./mainRoutes";
 
 export default {
     authRoutes: authRoutes,
-    mainRoutes: mainRoutes
+    mainRoutes: mainRoutes,
 };

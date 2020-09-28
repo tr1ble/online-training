@@ -1,4 +1,4 @@
-const API_URL = "https://localhost:32555/"
+const API_URL = "http://localhost:32555/"
 
 const CONFIG = {
     API_URL,

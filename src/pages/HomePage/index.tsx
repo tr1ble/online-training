@@ -33,10 +33,10 @@ class AuthPage extends React.PureComponent<AuthPageProps> {
 
     render() {
         return (
-            <div className={'pageContainer homePage'} onScroll={this.handleScroll}>
+            <div className={'pageContainer'} onScroll={this.handleScroll}>
               <div className={'top'}>
                   <nav className={this.activeClass} data-ud-nav>
-                    <a className={'menu-logo'} href={'/'}>
+                    <a className={'menu-logo-home'} href={'/'}>
                         <img src={'/images/logo.png'} alt={'Online training logo'}/>
                     </a>
                     <menu className={'menu-nav'}>
@@ -61,6 +61,10 @@ class AuthPage extends React.PureComponent<AuthPageProps> {
                             className={'menu-auth-button menu-auth-button--sec'}
                             type="link"
                             onClick={() => {
+                                this.setState({
+                                  isAlertVisible:false,
+                                  message:"",
+                                  type:""});
                                 history.push("/register");
                               }}>
                             ЗАРЕГИСТРИРОВАТЬСЯ

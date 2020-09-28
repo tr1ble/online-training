@@ -1,1 +1,5 @@
-export { default as LoginForm } from "./LoginForm"
+export { default as LoginForm } from "./forms/LoginForm"
+export { default as RegisterForm } from "./forms/RegisterForm"
+export { default as CssTextValidator } from "./forms/controls/CssTextValidator"
+export { default as Header } from "./Header"
+export { default as Menu } from "./Menu"

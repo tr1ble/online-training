@@ -3,7 +3,6 @@ import './App.css';
 
 import { inject, observer } from "mobx-react";
 import { Router, Route, Switch } from 'react-router-dom';
-import { Alert } from 'antd'
 
 import * as pages from 'pages';
 import history from 'global/history'
@@ -18,8 +17,7 @@ interface AppProps {
 class App extends React.PureComponent<AppProps> {
 
   getRoutes() {
-    const { authorized } = this.props.authState;
-    const actualRoutes = authorized ? routes.mainRoutes : routes.authRoutes;
+    const actualRoutes = routes.mainRoutes.concat(routes.authRoutes);
     return actualRoutes.map(r => (
       <Route
         key={r.path}
@@ -30,31 +28,10 @@ class App extends React.PureComponent<AppProps> {
     ));
   }
   render() {
-    const {
-      isAlertVisible,
-      textAlert,
-      typeAlert,
-      //authorized,
-      //setAuthorized,
-      hideAlert
-    } = this.props.authState;
     return (
       <>
         <Router history={history}>
           <div className={'appContainer'}>
-            {isAlertVisible && (
-              <Alert
-                className={"alertContainer"}
-                message={textAlert}
-                type={typeAlert}
-                closable
-                onClose={() => {
-                  setTimeout(() => {
-                    hideAlert();
-                  }, 1000);
-                }}
-              />
-            )}
 
             <Switch>
               {this.getRoutes()}

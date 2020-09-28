@@ -4,14 +4,18 @@ import "./index.css";
 import App from "./App";
 import { Provider } from "mobx-react";
 import * as serviceWorker from './serviceWorker';
+import theme from './global/theme';
 
 import states from "states";
+import { ThemeProvider } from "@material-ui/core";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider {...states}>
-      <App />
-    </Provider>
+    <ThemeProvider theme={theme}>
+      <Provider {...states}>
+        <App />
+      </Provider>
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

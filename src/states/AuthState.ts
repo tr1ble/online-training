@@ -1,6 +1,8 @@
 import { action, observable, runInAction, configure } from "mobx";
-import { loginAttempt} from "api/auth";
+import { loginAttempt, register } from "api/auth";
 
+import history from "global/history";
+import { getProfileImage } from "api/profile";
 
 configure( {enforceActions: "observed"});
 
@@ -10,12 +12,15 @@ class AuthState {
     @observable token: string |null = '';
     @observable authorized:boolean = false;
     @observable role: "ROLE_STUDENT" | "ROLE_TRAINER" | "ROLE_ADMINISTRATOR" | "ROLE_DEFAULT" | undefined = undefined;
+    @observable remember: boolean = false;
+
+    @observable picture:any = null;
 
     @observable isAlertVisible = false;
-    @observable textAlert = "";
-    @observable typeAlert: "warning" | "error" | "success" = "warning";
+    @observable message = "";
+    @observable alertType = "";
 
-    @action toLogin = async ({login, password}:{login:string; password:string}) => {
+    @action toLogin = async ({login, password, remember}:{login:string; password:string; remember: boolean}) => {
         try {
             const {responseLogin,token,role} = await loginAttempt({login, password});
             runInAction(()=> {
@@ -24,12 +29,18 @@ class AuthState {
                 this.password = password;
                 this.role = role;
                 this.token = token;
+                this.remember=remember;
+                this.picture = getProfileImage(login);
             });
             localStorage.setItem("login", login);
             localStorage.setItem("role", role);
             localStorage.setItem("authorized", "true");
+            localStorage.setItem("token", token);
+            localStorage.setItem("password", password);
+            localStorage.setItem("remember", remember+"")
+            history.push('/main');
         } catch (error) {
-            this.showAlert("Неверный логин или пароль", "error")
+            this.showAlert("Неверный логин или пароль", "login")
         }
     };
 
@@ -39,21 +50,24 @@ class AuthState {
         const role = localStorage.getItem("role");
         const password = localStorage.getItem("password");
         const token = localStorage.getItem("token");
-        const resRole = role === null ? undefined : role;
-    
+        const remember = localStorage.getItem("remember") == 'true';
+        const resRole = role === null ? undefined : role
         if (
           resRole == "ROLE_STUDENT" ||
           resRole == "ROLE_TRAINER" ||
           resRole == "ROLE_ADMINISTRATOR" ||
           resRole == "ROLE_DEFAULT"
         ) {
-          if (authorized && login) {
+          if (authorized && login && remember) {
             runInAction(() => {
               this.authorized = true;
               this.role = resRole;
               this.login = login;
               this.password = password;
               this.token = token;
+              this.remember = true;
+              //this.picture = getProfileImage(login);
+              history.push("/main")
             });
           }
         }
@@ -66,29 +80,30 @@ class AuthState {
             this.password = "";
             this.token = "";
             this.role = undefined;
+            this.remember = false;
+            this.picture = null;
         });
         localStorage.setItem("login", this.login);
         localStorage.setItem("role", "");
         localStorage.setItem("password", "");
         localStorage.setItem("token", "");
         localStorage.setItem("authrized", "false");
+        localStorage.setItem("remember", "false");
     };
 
-    @action hideAlert = () => {
+    @action hideAlert = (alertType:string) => {
         runInAction(()=>{
             this.isAlertVisible = false;
-            this.textAlert="";
-            this.typeAlert="warning";
+            this.message="";
+            this.alertType = alertType;
         });
     };
 
-    @action showAlert = (message:string, type?: "warning" | "error" | "success") => {
+    @action showAlert = (message:string, alertType:string) => {
         runInAction(()=> {
             this.isAlertVisible = true;
-            this.textAlert = message;
-            if(type) {
-                this.typeAlert = type;
-            }
+            this.message = message;
+            this.alertType = alertType;
         });
 
         setTimeout(()=> this.hideAlert, 5000);
@@ -98,6 +113,31 @@ class AuthState {
         runInAction(() => {
           this.authorized = true;
         });
+      };
+
+      @action tryRegister = async ({
+        login,
+        password,
+        email,
+        role
+      }: {
+        login: string;
+        password: string;
+        email: string;
+        role: string;
+      }) => {
+        try {
+          await register({
+            login,
+            password,
+            email,
+            role: "ROLE_DEFAULT"
+          });
+          let remember:boolean=false;
+          this.toLogin({login,password,remember});
+        } catch (error) {
+          this.showAlert("Ошибка регистрации", "register");
+        }
       };
 }
 

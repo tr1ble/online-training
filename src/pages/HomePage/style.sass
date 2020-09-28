@@ -1,8 +1,3 @@
-.homePage 
-    font: 300 20px/1.5em Proxima Nova,sans-serif
-    position: relative;
-    left: 0;
-
 .top 
     position: relative
     display: flex
@@ -14,6 +9,7 @@
     @media only screen and (min-width: 40.063em) 
         top: 0
         left: 0
+        height: 13vh
         width: 100%
         display: -webkit-flex
         display: -ms-flexbox
@@ -28,6 +24,13 @@
         -webkit-justify-content: space-between
         -ms-flex-pack: justify
         justify-content: space-between
+    @media only screen and (max-width: 40.063em) 
+        align-items: center
+        height: 14vh
+    @media only screen and (max-width: 35.063em) 
+        height: 19vh
+    @media only screen and (max-width: 25.063em) 
+        height: 25vh
 
 .menuRoot 
     position: relative
@@ -39,8 +42,8 @@
     text-decoration: none
     text-transform: uppercase
     z-index: 100
-    border-bottom: 0.1rem solid white
-    @media only screen and (min-width: 64.063em) 
+    @media only screen and (min-width: 64.063em)
+        border-bottom: 0.1rem solid white 
         position: fixed;
         -webkit-transform: translate3d(0,2rem,0)
         transform: translate3d(0,2rem,0)
@@ -85,7 +88,7 @@
         box-shadow: 0 0 0 0 #2c2e31
 
 
-.menu-logo
+.menu-logo-home
     position: absolute
     top: 100%
     left: 0
@@ -96,6 +99,8 @@
     @media only screen and (min-width: 40.063em)
         position: static
         margin: 0
+
+
 
 .menu-nav 
     position: fixed
@@ -221,20 +226,15 @@
 img
     background-color: transparent
 
-.user-box-button
-    display: -webkit-flex
-    display: -ms-flexbox
-    display: flex
-    -webkit-align-items: center
-    -ms-flex-align: center
-    align-items: center
-    -webkit-justify-content: center
-    -ms-flex-pack: justify
-    justify-content: center
-
 .home-top 
     padding-bottom: 40px
     background: linear-gradient(1turn,#303435,#292d2d 47.83%,#151618)
+    width: 100vw
+    @media only screen and (min-width: 64.063em)
+        padding-left: 50px
+        padding-right: 50px
+        padding-bottom: 50px
+
 
 
 .page-top 
@@ -244,7 +244,7 @@ img
     overflow: hidden
     padding: 180px 20px 0
     text-align: center
-
+    width: 100vw
     @media only screen and (min-width: 40.063em)
         padding-top: 100px
         background-size: cover
@@ -280,6 +280,7 @@ img
 
 main 
     display: block
+    width: 100vw;
 
 
 img 
@@ -306,6 +307,3 @@ h1
 .page-intro-image 
     width: 100%
     max-width: 1080px
-
-
-

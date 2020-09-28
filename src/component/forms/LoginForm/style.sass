@@ -18,7 +18,7 @@
         position: relative
 
 .login-popup h2 
-  margin: 0 0 30px
+  margin: 0 0 10px
   padding: 0
   color: #fff
   text-align: center
@@ -31,9 +31,8 @@
   padding: 10px 0
   font-size: 16px
   color: #fff
-  margin-bottom: 30px
+  margin-bottom: 5px
   border: none
-  border-bottom: 1px solid #fff
   outline: none
   background: transparent
 
@@ -47,6 +46,9 @@
   pointer-events: none
   transition: .5s
 
+.login-popup span
+  color: #ffffff
+
 .login-popup .user-box input:focus ~ label
   top: -20px
   left: 0
@@ -57,3 +59,19 @@
   left: 0
   color: #f6e770
   font-size: 12px
+
+.user-box-button
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  -webkit-align-items: center
+  -ms-flex-align: center
+  align-items: center
+  -webkit-justify-content: center
+  -ms-flex-pack: justify
+  justify-content: center
+
+.error-message-login
+  margin-top: 9px
+  color: #ff0000
+  font-size: 16px
