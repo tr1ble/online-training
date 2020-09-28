@@ -9,6 +9,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
                 @ComponentScan.Filter(type= FilterType.ANNOTATION, value= EnableWebMvc.class)
         })
 public class RootConfig {
+
         @Bean
         public BCryptPasswordEncoder passwordEncoder() {
                 return new BCryptPasswordEncoder();

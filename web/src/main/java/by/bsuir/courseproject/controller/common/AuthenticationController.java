@@ -38,7 +38,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity login(@RequestBody AuthenticationRequestDto authenticationRequestDto) {
+    public ResponseEntity<Map<Object, Object>> login(@RequestBody AuthenticationRequestDto authenticationRequestDto) {
         try {
             String login = authenticationRequestDto.getLogin();
             System.out.println(passwordEncoder.encode(authenticationRequestDto.getPassword()));

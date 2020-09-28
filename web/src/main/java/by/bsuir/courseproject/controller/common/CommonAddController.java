@@ -29,7 +29,7 @@ public class CommonAddController {
     }
 
     @PostMapping(value = {"/register"}, consumes = "application/json")
-    public ResponseEntity register(@RequestBody(required = false) User user) {
+    public ResponseEntity<String> register(@RequestBody(required = false) User user) {
         Optional<User> userOptional = userService.getUserByLogin(user.getLogin());
         if(!userOptional.isPresent()) {
             user.setRole(Role.valueOf(ROLE_DEFAULT));

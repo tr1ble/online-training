@@ -10,6 +10,7 @@ import by.bsuir.courseproject.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,16 +21,17 @@ import java.util.Optional;
 @RestController
 public class CommonGetController {
 
-    private StudentService studentService;
-    private TaskService taskService;
-    private CompletedTaskService completedTaskService;
-    private TrainerService trainerService;
-    private CourseService courseService;
+    private final StudentService studentService;
+    private final TaskService taskService;
+    private final CompletedTaskService completedTaskService;
+    private final TrainerService trainerService;
+    private final CourseService courseService;
+    private final UserService userService;
 
 
     @Autowired
-    public CommonGetController(StudentService studentService, TaskService taskService, CompletedTaskService completedTaskService, TrainerService trainerService, CourseService courseService) {
-
+    public CommonGetController(StudentService studentService, TaskService taskService, CompletedTaskService completedTaskService, TrainerService trainerService, CourseService courseService, UserService userService) {
+        this.userService = userService;
         this.courseService = courseService;
         this.studentService = studentService;
         this.taskService = taskService;
@@ -163,4 +165,17 @@ public class CommonGetController {
         Optional<Student> studentOptional = studentService.findByFio(surname, firstname, secondname);
         return studentOptional.map(student -> new ResponseEntity<>(student, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    @GetMapping(value = "/currentUser/{username}", produces = "application/json")
+    public ResponseEntity<User> getTrainerById(@PathVariable String username, Authentication authentication) {
+        ResponseEntity<User> responseEntityNotFound = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(authentication.getName().equals(username)) {
+            Optional<User> userOptional = userService.getUserByLogin(username);
+            return userOptional.map((user) -> new ResponseEntity<>(user, HttpStatus.OK)
+            ).orElse(responseEntityNotFound);
+        } else {
+            return responseEntityNotFound;
+        }
+    }
+
 }

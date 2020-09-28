@@ -21,13 +21,14 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserServiceImpl() throws IllegalArgumentException {
+    @Autowired
+    public UserServiceImpl(BCryptPasswordEncoder passwordEncoder, UserRepository userRepository) throws IllegalArgumentException {
+        this.passwordEncoder=passwordEncoder;
+        this.userRepository=userRepository;
     }
 
     @Override

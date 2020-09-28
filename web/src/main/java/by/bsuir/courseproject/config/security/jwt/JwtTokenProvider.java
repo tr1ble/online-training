@@ -23,8 +23,7 @@ public class JwtTokenProvider {
 
     @Value("${jwt.token.secret}")
     private String secretToken;
-    @Value("${jwt.token.time}")
-    private long validTime;
+
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -39,13 +38,9 @@ public class JwtTokenProvider {
         Claims claims = Jwts.claims().setSubject(login);
         claims.put("role", role.getValue());
 
-        Date date = new Date();
-        Date validity = new Date(date.getTime() + validTime);
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setIssuedAt(date)
-                .setExpiration(validity)
                 .signWith(SignatureAlgorithm.HS256, secretToken)
                 .compact();
 
@@ -73,7 +68,7 @@ public class JwtTokenProvider {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretToken).parseClaimsJws(token);
             return !claimsJws.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException ex) {
-            throw new JwtAuthException("JWT token is expired on invalid");
+            throw new JwtAuthException("JWT token is invalid");
         }
     }
 

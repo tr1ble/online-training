@@ -7,6 +7,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 
 @Entity
 @Table(name="users")
@@ -30,6 +31,11 @@ public class User {
     @Column(name="role")
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Basic
+    @Column(name="email", nullable = false, length = 200)
+    @Email
+    private String email;
 
     @OneToOne
     @JoinColumn(name="file_id")

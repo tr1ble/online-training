@@ -63,5 +63,10 @@ public class Course implements Identifable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private DatabaseFile image;
 
+    @Override
+    public Integer getId() {
+        return id;
+    }
+
 }
 

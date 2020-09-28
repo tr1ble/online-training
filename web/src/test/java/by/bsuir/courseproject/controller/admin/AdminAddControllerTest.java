@@ -5,6 +5,7 @@ import by.bsuir.courseproject.entites.Course;
 import by.bsuir.courseproject.entites.Role;
 import by.bsuir.courseproject.entites.Trainer;
 import by.bsuir.courseproject.entites.User;
+import by.bsuir.courseproject.entites.files.DatabaseFile;
 import by.bsuir.courseproject.service.course.CourseService;
 import by.bsuir.courseproject.service.user.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -54,7 +55,7 @@ public class AdminAddControllerTest {
     public void addCourseTestShouldBeStatus200AndReturnCourseAsJson() throws Exception {
         String uri = "/course";
 
-        Course course=new Course(new Trainer(new User("trainer", "trainer", Role.valueOf("ROLE_TRAINER"))), "description", new Date(), new Date());
+        Course course=new Course(1, new Trainer(new User("trainer", "trainer", Role.valueOf("ROLE_TRAINER"),"email", Mockito.mock(DatabaseFile.class))), "description", new Date(), new Date());
 
         String inputJson = new ObjectMapper().writeValueAsString(course);
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(uri)

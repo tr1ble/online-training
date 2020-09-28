@@ -76,11 +76,10 @@ class TaskServiceImplTest {
 
     @Test
     public void getTaskByIdTest() throws ParseException {
-        int expectedCourseId = 22;
         String expectedTitle = "two";
         String expectedDescription = "two";
 
-        Task expectedTask = new Task(2,expectedTitle, new Course(expectedCourseId), expectedDescription);
+        Task expectedTask = new Task(2,expectedTitle, new Course(), expectedDescription);
 
         Mockito.when(taskRepository.findById(2)).thenReturn(Optional.of(expectedTask));
 
