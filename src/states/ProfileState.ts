@@ -1,5 +1,3 @@
-//configure({ enforceActions: 'observed' });
-
 class ProfileState {
  
 }

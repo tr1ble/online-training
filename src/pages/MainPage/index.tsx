@@ -27,7 +27,9 @@ class MainPage extends React.PureComponent<MainPageProps> {
         return (
             <div className={'pageContainer--main'} onScroll={this.handleScroll}>
               <Menu/>
-              <Header/>
+              <div className={'main nav--opened'}>
+                <Header/>
+              </div>
             </div>
         )
     }

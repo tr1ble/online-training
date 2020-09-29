@@ -118,13 +118,11 @@ class AuthState {
       @action tryRegister = async ({
         login,
         password,
-        email,
-        role
+        email
       }: {
         login: string;
         password: string;
         email: string;
-        role: string;
       }) => {
         try {
           await register({

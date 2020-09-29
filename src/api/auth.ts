@@ -22,7 +22,7 @@ export async function register({
   }) {
     const instance = await getInstance();
   
-    const response = await instance.post('/register', {
+    await instance.post('/register', {
       login,
       password,
       email,

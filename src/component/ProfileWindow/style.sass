@@ -1,0 +1,71 @@
+
+.profile-popup
+    position: absolute
+    top: 62px
+    right: 0px
+    width: 215px
+    z-index: 2500
+    width: 300px
+    padding: 20px
+    //transform: translate(-50%, -50%)
+    //background: rgba(0,0,0,.5)
+    background: #2c2e31
+    box-sizing: border-box;
+    @media only screen and (min-width: 40.063em)
+      position: absolute
+      top: 62px
+      right: 0px
+.profile-popup h2 
+  margin: 0 0 10px
+  padding: 0
+  color: #fff
+  text-align: center
+
+.profile-popup .user-box 
+  position: relative
+
+.profile-popup .user-box input 
+  width: 100%
+  padding: 10px 0
+  font-size: 16px
+  color: #fff
+  margin-bottom: 5px
+  border: none
+  outline: none
+  background: transparent
+
+.profile-popup .user-box label 
+  position: absolute
+  top: 0
+  left: 0
+  padding: 10px 0
+  font-size: 16px
+  color: #fff
+  pointer-events: none
+  transition: .5s
+
+.profile-popup span
+  color: #ffffff
+
+.profile-popup .user-box input:focus ~ label
+  top: -20px
+  left: 0
+  color: #f6e770
+  font-size: 12px
+.profile-popup .user-box input:valid ~ label 
+  top: -20px
+  left: 0
+  color: #f6e770
+  font-size: 12px
+
+.user-box-button
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  -webkit-align-items: center
+  -ms-flex-align: center
+  align-items: center
+  -webkit-justify-content: center
+  -ms-flex-pack: justify
+  justify-content: center
+

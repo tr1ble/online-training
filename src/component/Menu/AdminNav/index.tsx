@@ -2,6 +2,8 @@ import { inject, observer } from "mobx-react";
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAddressCard } from '@fortawesome/free-solid-svg-icons'
+import { faGraduationCap } from '@fortawesome/free-solid-svg-icons'
+import { faChalkboardTeacher } from '@fortawesome/free-solid-svg-icons'
 
 import "./style.sass";
 
@@ -19,8 +21,8 @@ class AdminNav extends React.PureComponent<AdminNavProps> {
                 <div className={'nav-container'}>
                     <div>
                         <nav>
-                            <div className={'nav-item'}>
-                                <a className={'menu-item nav-inner-item'}>
+                        <div className={'nav-item'}>
+                                <a className={'menu-item nav-inner-item'} href='/trainers'>
                                     <i className={'ico ico--bar'}>
                                         <FontAwesomeIcon icon={faAddressCard}/>    
                                     </i>
@@ -28,6 +30,28 @@ class AdminNav extends React.PureComponent<AdminNavProps> {
                                 </a>
                             </div>
                             <div className={'nav-item'}>
+                                <a className={'menu-item nav-inner-item'} href='/courses'>
+                                    <i className={'ico ico--bar'}>
+                                        <FontAwesomeIcon icon={faGraduationCap}/>    
+                                    </i>
+                                    КУРСЫ
+                                </a>
+                            </div>
+                            <div className={'nav-item'}>
+                                <a className={'menu-item nav-inner-item'} href='/users'>
+                                    <i className={'ico ico--bar'}>
+                                        <FontAwesomeIcon icon={faAddressCard}/>    
+                                    </i>
+                                    ПОЛЬЗОВАТЕЛИ
+                                </a>
+                            </div>
+                            <div className={'nav-item'}>
+                                <a className={'menu-item nav-inner-item'} href='/students'>
+                                    <i className={'ico ico--bar'}>
+                                        <FontAwesomeIcon icon={faChalkboardTeacher}/>    
+                                    </i>
+                                    СТУДЕНТЫ
+                                </a>
                             </div>
                         </nav>
                     </div>
