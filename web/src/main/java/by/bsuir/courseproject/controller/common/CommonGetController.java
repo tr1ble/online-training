@@ -1,8 +1,12 @@
 package by.bsuir.courseproject.controller.common;
 
 import by.bsuir.courseproject.entites.*;
+import by.bsuir.courseproject.entites.files.DatabaseFile;
+import by.bsuir.courseproject.entites.files.UploadFile;
+import by.bsuir.courseproject.exceptions.FileStorageException;
 import by.bsuir.courseproject.service.completedtask.CompletedTaskService;
 import by.bsuir.courseproject.service.course.CourseService;
+import by.bsuir.courseproject.service.databasefile.DatabaseFileService;
 import by.bsuir.courseproject.service.student.StudentService;
 import by.bsuir.courseproject.service.task.TaskService;
 import by.bsuir.courseproject.service.trainer.TrainerService;
@@ -13,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +36,8 @@ public class CommonGetController {
 
 
     @Autowired
-    public CommonGetController(StudentService studentService, TaskService taskService, CompletedTaskService completedTaskService, TrainerService trainerService, CourseService courseService, UserService userService) {
+    public CommonGetController(StudentService studentService, TaskService taskService, CompletedTaskService completedTaskService, TrainerService trainerService,
+                               CourseService courseService, UserService userService) {
         this.userService = userService;
         this.courseService = courseService;
         this.studentService = studentService;
@@ -166,16 +173,23 @@ public class CommonGetController {
         return studentOptional.map(student -> new ResponseEntity<>(student, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping(value = "/currentUser/{username}", produces = "application/json")
-    public ResponseEntity<User> getTrainerById(@PathVariable String username, Authentication authentication) {
+    @PostMapping(value = "/currentUser", produces = "application/json")
+    public ResponseEntity<User> getCurrentUser(Authentication authentication) {
         ResponseEntity<User> responseEntityNotFound = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        if(authentication.getName().equals(username)) {
-            Optional<User> userOptional = userService.getUserByLogin(username);
-            return userOptional.map((user) -> new ResponseEntity<>(user, HttpStatus.OK)
-            ).orElse(responseEntityNotFound);
-        } else {
-            return responseEntityNotFound;
-        }
+        String name = authentication.getName();
+        System.out.println(name);
+        Optional<User> userOptional = userService.getUserByLogin(name);
+        return userOptional.map((user) -> new ResponseEntity<>(user, HttpStatus.OK)
+        ).orElse(responseEntityNotFound);
     }
+
+    @PostMapping(value = "/getImage/{login}", produces = "application/json")
+    public ResponseEntity<DatabaseFile> getImage(@PathVariable("login") String username) {
+        Optional<User> userOptional = userService.getUserByLogin(username);
+        System.out.println(userOptional);
+        return userOptional.map((user) -> new ResponseEntity<>(user.getImage(), HttpStatus.OK)
+        ).orElse(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+    }
+
 
 }

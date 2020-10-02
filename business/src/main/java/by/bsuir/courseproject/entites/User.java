@@ -5,6 +5,7 @@ import by.bsuir.courseproject.entites.files.DatabaseFile;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.dialect.Database;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;

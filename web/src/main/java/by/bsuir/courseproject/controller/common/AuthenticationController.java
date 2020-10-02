@@ -41,7 +41,6 @@ public class AuthenticationController {
     public ResponseEntity<Map<Object, Object>> login(@RequestBody AuthenticationRequestDto authenticationRequestDto) {
         try {
             String login = authenticationRequestDto.getLogin();
-            System.out.println(passwordEncoder.encode(authenticationRequestDto.getPassword()));
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, authenticationRequestDto.getPassword()));
             Optional<User> user = userService.getUserByLogin(login);
             if(!user.isPresent()) {
