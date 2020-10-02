@@ -29,7 +29,7 @@ class RegisterPage extends React.PureComponent<RegisterPageProps> {
                 <div className={'home'}>
                     <div className={'top'}>
                         <nav className={this.activeClass} data-ud-nav>
-                            <a className={'menu-logo'} href={'/'}>
+                            <a className={'menu-logo-home'} href={'/'}>
                                 <img src={'/images/logo.png'} alt={'Online training logo'}/>
                             </a>
                             <div className={'menu-auth'}> 

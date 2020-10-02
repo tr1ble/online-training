@@ -34,7 +34,7 @@ class LoginForm extends React.PureComponent<LoginProps> {
               this.password = event.currentTarget.value;
               break;
           case 'remember':
-              this.remember = event.currentTarget.value == 'true';
+              this.remember = true;
               break;
       }
   }
@@ -52,8 +52,7 @@ class LoginForm extends React.PureComponent<LoginProps> {
                     <h2>Вход</h2>
                     <ValidatorForm
                       name="login"
-                      onSubmit={this.onSubmit}
-                    >
+                      onSubmit={this.onSubmit}>
                       <div className={"user-box"}>
                         <CssTextValidator
                           label='Имя пользователя'
@@ -78,6 +77,7 @@ class LoginForm extends React.PureComponent<LoginProps> {
                           <Checkbox
                             name={'remember'}
                             color={'secondary'}
+                            checked={this.remember}
                             value={this.remember}
                             onChange={this.handleChange}/>
                         }

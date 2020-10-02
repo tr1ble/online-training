@@ -2,7 +2,8 @@ import { action, observable, runInAction, configure } from "mobx";
 import { loginAttempt, register } from "api/auth";
 
 import history from "global/history";
-import { getProfileImage } from "api/profile";
+import { getProfileImage, uploadProfileImage } from "api/profile";
+
 
 configure( {enforceActions: "observed"});
 
@@ -22,54 +23,53 @@ class AuthState {
 
     @action toLogin = async ({login, password, remember}:{login:string; password:string; remember: boolean}) => {
         try {
-            const {responseLogin,token,role} = await loginAttempt({login, password});
+            const {token,role} = await loginAttempt({login, password});
             runInAction(()=> {
-                this.login = responseLogin;
+                this.login = login;
                 this.authorized = true;
                 this.password = password;
                 this.role = role;
                 this.token = token;
                 this.remember=remember;
-                this.picture = getProfileImage(login);
             });
             localStorage.setItem("login", login);
             localStorage.setItem("role", role);
             localStorage.setItem("authorized", "true");
             localStorage.setItem("token", token);
             localStorage.setItem("password", password);
-            localStorage.setItem("remember", remember+"")
+            localStorage.setItem("remember", remember+"");
+            this.picture = await getProfileImage(this.login);
             history.push('/main');
         } catch (error) {
             this.showAlert("Неверный логин или пароль", "login")
         }
     };
 
+    @action uploadImage = async ({image}:{image:any}) => {
+      await uploadProfileImage(this.login, image);
+      this.picture = image;
+    }
+
     @action autoLogin = async () => {
-        const authorized = localStorage.getItem('authorized') == 'true';
-        const login = localStorage.getItem("login");
-        const role = localStorage.getItem("role");
-        const password = localStorage.getItem("password");
-        const token = localStorage.getItem("token");
-        const remember = localStorage.getItem("remember") == 'true';
-        const resRole = role === null ? undefined : role
-        if (
-          resRole == "ROLE_STUDENT" ||
-          resRole == "ROLE_TRAINER" ||
-          resRole == "ROLE_ADMINISTRATOR" ||
-          resRole == "ROLE_DEFAULT"
-        ) {
-          if (authorized && login && remember) {
-            runInAction(() => {
-              this.authorized = true;
-              this.role = resRole;
-              this.login = login;
-              this.password = password;
-              this.token = token;
-              this.remember = true;
-              //this.picture = getProfileImage(login);
-              history.push("/main")
-            });
+      try {
+          const login = localStorage.getItem("login");
+          const role = localStorage.getItem("role");
+          const rpassword = localStorage.getItem("password")
+          const password = rpassword  === null ? '' : rpassword;
+          const remember = localStorage.getItem("remember") == 'true';
+          const resRole = role === null ? undefined : role
+          if (
+            resRole == "ROLE_STUDENT" ||
+            resRole == "ROLE_TRAINER" ||
+            resRole == "ROLE_ADMINISTRATOR" ||
+            resRole == "ROLE_DEFAULT"
+          ) {
+            if (login && remember) {
+              this.toLogin({login, password, remember});
+            }
           }
+        } catch (error) {
+          console.log(error);
         }
       };
 
@@ -89,6 +89,7 @@ class AuthState {
         localStorage.setItem("token", "");
         localStorage.setItem("authrized", "false");
         localStorage.setItem("remember", "false");
+        history.push('/');
     };
 
     @action hideAlert = (alertType:string) => {
@@ -132,7 +133,7 @@ class AuthState {
             role: "ROLE_DEFAULT"
           });
           let remember:boolean=false;
-          this.toLogin({login,password,remember});
+          await this.toLogin({login,password,remember});
         } catch (error) {
           this.showAlert("Ошибка регистрации", "register");
         }

@@ -1,11 +1,13 @@
-import { FormControlLabel,Checkbox} from '@material-ui/core';
-import { CssTextValidator } from 'component';
-import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import React from 'react'
-import { ValidatorForm } from 'react-material-ui-form-validator';
+import { faCog } from '@fortawesome/free-solid-svg-icons'
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 
+import history from "global/history";
 import './style.sass';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { action, observable, runInAction } from 'mobx';
+import AvatarUploadWindow from 'component/AvatarUploadWindow';
 
 interface ProfileWindowProps {
     authState?: any;
@@ -14,86 +16,64 @@ interface ProfileWindowProps {
 @inject('authState')
 @observer
 class ProfileWindow extends React.PureComponent<ProfileWindowProps> {
-
-  @observable login:string = '';
-  @observable password:string = '';
-  @observable remember:boolean = false;
-  
-    onSubmit = () => {
-        const { authState } = this.props;
-        authState.toLogin({login:this.login, password:this.password,remember:this.remember});
+    @observable isAvatarUploadVisible:boolean = false;
+    render() {
+      const { login, picture, logout } = this.props.authState;
+        return(
+          <div>
+            <div className={'profile-popup'}>
+              <div className={'profile-block'}>
+                <div className={'profile-info'}>
+                    {(picture==null) && (<img src='/images/user-white.png' alt='User profile image' className={'image-profile--big'}/>)}
+                    <div className={'profile-name'}>
+                      <span>{login}</span>
+                      <a className={'profile-image-change'} onClick={() => {
+                            if(this.isAvatarUploadVisible) {
+                                this.hideAvatarUpload();
+                            } else {
+                                this.showAvatarUpload();
+                            }
+                          }}
+                      >Изменить аватар</a>
+                    </div>
+                </div>
+                <div className={'profile-entry'}>
+                  <div className={'profile-settings'}>
+                    <i className={'ico ico--profile'}>
+                      <FontAwesomeIcon icon={faCog}/>    
+                    </i>
+                    <a>Настройки</a>
+                  </div>
+                </div>
+              </div>
+              <div className={'profile-block'}>
+                <div className={'profile-entry'}>
+                  <div className={'profile-logout'}>
+                    <i className={'ico ico--profile'}>
+                      <FontAwesomeIcon icon={faSignOutAlt}/>    
+                    </i>
+                    <a onClick={()=>  {
+                      logout();
+                      history.push("/");
+                    }}>Выйти</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {this.isAvatarUploadVisible && (
+                    <AvatarUploadWindow/>)}
+            </div>);
+    };
+    @action showAvatarUpload = () => {
+        runInAction(()=> {
+            this.isAvatarUploadVisible = true;
+        })
     };
 
-    @action handleChange = (event: React.FormEvent<HTMLInputElement>) => {
-      let field: string = event.currentTarget.name;
-      switch(field) {
-          case "login":
-              this.login =  event.currentTarget.value;
-              break;
-          case 'password':
-              this.password = event.currentTarget.value;
-              break;
-          case 'remember':
-              this.remember = event.currentTarget.value == 'true';
-              break;
-      }
-  }
-    
-    render() {
-      const
-          {
-              isAlertVisible,
-              message,
-              alertType
-        } = this.props.authState;
-        let type:string = alertType;
-        return(
-            <div className={'profile-popup'}>
-                    <h2>Вход</h2>
-                    <ValidatorForm
-                      name="login"
-                      onSubmit={this.onSubmit}
-                    >
-                      <div className={"user-box"}>
-                        <CssTextValidator
-                          label='Имя пользователя'
-                          name='login'
-                          color='secondary'
-                          onChange={this.handleChange}
-                        />
-                      </div>
-                      <div className={"user-box"}>
-                        <CssTextValidator
-                          label='Пароль'
-                          name='password'
-                          color='secondary'
-                          onChange={this.handleChange}
-                        />
-                      </div>
-                      {isAlertVisible && type=="login" && (
-                        <div className={'error-message-login'}>{message}</div>
-                      )}
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            name={'remember'}
-                            color={'secondary'}
-                            value={this.remember}
-                            onChange={this.handleChange}/>
-                        }
-                        label={'Запомнить'}
-                        color={'primary'}/>
-                      <div className={"user-box-button"}>
-                        <button
-                          className={'menu-auth-button menu-auth-button--sec'}
-                          type="submit"
-                        >
-                          Войти
-                        </button>
-                      </div>
-                  </ValidatorForm>
-            </div>
-        );
+    @action hideAvatarUpload = () => {
+        runInAction(()=> {
+            this.isAvatarUploadVisible = false;
+        })
     };
 };
 

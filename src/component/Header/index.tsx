@@ -16,7 +16,7 @@ interface HeaderProps {
 @observer
 class Header extends React.PureComponent<HeaderProps> {
 
-    @observable isProfileVisible:boolean = false;
+    @observable isProfileWindowVisible:boolean = false;
 
     render() {
         const { login, picture } = this.props.authState;
@@ -28,7 +28,7 @@ class Header extends React.PureComponent<HeaderProps> {
                         </div>
                         <div className={'header-controls'}
                         onClick={() => {
-                            if(this.isProfileVisible) {
+                            if(this.isProfileWindowVisible) {
                                 this.hideProfile();
                             } else {
                                 this.showProfile();
@@ -39,11 +39,12 @@ class Header extends React.PureComponent<HeaderProps> {
                             </div>
                             <div className={'header-control'}>
                                 {(picture==null) && (<img src='/images/user.png' alt='User profile image' className={'image-profile'}/>)}
+                                {(picture!=null) && (<img src={picture} alt='User profile image' className={'image-profile'}/>)}
                             </div>
                         </div>
                     </header>
                 </div>
-                {this.isProfileVisible && (
+                {this.isProfileWindowVisible && (
                     <ProfileWindow/>)}
             </div>
         );
@@ -52,13 +53,13 @@ class Header extends React.PureComponent<HeaderProps> {
     
     @action showProfile = () => {
         runInAction(()=> {
-            this.isProfileVisible = true;
+            this.isProfileWindowVisible = true;
         })
     };
 
     @action hideProfile = () => {
         runInAction(()=> {
-            this.isProfileVisible = false;
+            this.isProfileWindowVisible = false;
         })
     };
 };
