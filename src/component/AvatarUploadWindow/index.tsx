@@ -6,22 +6,26 @@ import "./style.sass";
 
 interface AvatarUploadWindowProps {
     authState?: any;
+    profileState?: any;
 }
 
 
 
 @inject('authState')
+@inject('profileState')
 @observer
 class AvatarUploadWindow extends React.PureComponent<AvatarUploadWindowProps> {
 
     picture: any;
 
-    onCrop = (picture:any) => {
-        this.picture =picture;
+    onCrop = (files:File[]) => {
+        this.picture = files[0];
     }
 
     onSubmit = () => {
         this.props.authState.uploadImage({image:this.picture});
+        const { profileState } = this.props;
+        profileState.hideProfile();
     };
 
     render() {

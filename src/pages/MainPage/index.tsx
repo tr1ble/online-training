@@ -29,6 +29,11 @@ class MainPage extends React.PureComponent<MainPageProps> {
               <Menu/>
               <div className={'main nav--opened'}>
                 <Header/>
+                <div className={'main-container'}>
+                  <div className={'main-content'}>
+
+                  </div>
+                </div>
               </div>
             </div>
         )

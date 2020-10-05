@@ -1,5 +1,4 @@
 import ProfileWindow from "component/ProfileWindow";
-import { action, observable, runInAction } from "mobx";
 import { inject, observer } from "mobx-react";
 import React from 'react';
 
@@ -13,13 +12,14 @@ interface HeaderProps {
 
 
 @inject('authState')
+@inject('profileState')
 @observer
 class Header extends React.PureComponent<HeaderProps> {
 
-    @observable isProfileWindowVisible:boolean = false;
-
     render() {
         const { login, picture } = this.props.authState;
+        const { profileState } = this.props;
+        const { isProfileVisible } = this.props.profileState;
         return (
             <div className={'header-container'}>
                 <div className={'header-content'}>
@@ -28,11 +28,7 @@ class Header extends React.PureComponent<HeaderProps> {
                         </div>
                         <div className={'header-controls'}
                         onClick={() => {
-                            if(this.isProfileWindowVisible) {
-                                this.hideProfile();
-                            } else {
-                                this.showProfile();
-                            }
+                            profileState.handleProfile();
                           }}>
                             <div className={'header-control'}>
                                 {login} 
@@ -44,24 +40,12 @@ class Header extends React.PureComponent<HeaderProps> {
                         </div>
                     </header>
                 </div>
-                {this.isProfileWindowVisible && (
+                {isProfileVisible && (
                     <ProfileWindow/>)}
             </div>
         );
     };
 
-    
-    @action showProfile = () => {
-        runInAction(()=> {
-            this.isProfileWindowVisible = true;
-        })
-    };
-
-    @action hideProfile = () => {
-        runInAction(()=> {
-            this.isProfileWindowVisible = false;
-        })
-    };
 };
 
 export default Header;

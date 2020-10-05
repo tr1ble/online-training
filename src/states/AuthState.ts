@@ -45,9 +45,9 @@ class AuthState {
         }
     };
 
-    @action uploadImage = async ({image}:{image:any}) => {
+    @action uploadImage = async ({image}:{image:File}) => {
       await uploadProfileImage(this.login, image);
-      this.picture = image;
+      action(()=>{this.picture = image});
     }
 
     @action autoLogin = async () => {
@@ -132,7 +132,7 @@ class AuthState {
             email,
             role: "ROLE_DEFAULT"
           });
-          let remember:boolean=false;
+          let remember:boolean=true;
           await this.toLogin({login,password,remember});
         } catch (error) {
           this.showAlert("Ошибка регистрации", "register");

@@ -42,7 +42,9 @@ class ProfileWindow extends React.PureComponent<ProfileWindowProps> {
                     <i className={'ico ico--profile'}>
                       <FontAwesomeIcon icon={faCog}/>    
                     </i>
-                    <a>Настройки</a>
+                    <a onClick={()=> {
+                      history.push("/settings")
+                    }}>Настройки</a>
                   </div>
                 </div>
               </div>

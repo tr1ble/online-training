@@ -6,7 +6,7 @@ export async function getProfileImage(login: string){
         return response.data.data;
 }
 
-export async function uploadProfileImage(login: string, file:any){
+export async function uploadProfileImage(login: string, file:File){
         const instance = await getInstance();
         let formData = new FormData();
         formData.append("file", file);
