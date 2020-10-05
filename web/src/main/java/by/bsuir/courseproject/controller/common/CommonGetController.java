@@ -2,8 +2,6 @@ package by.bsuir.courseproject.controller.common;
 
 import by.bsuir.courseproject.entites.*;
 import by.bsuir.courseproject.entites.files.DatabaseFile;
-import by.bsuir.courseproject.entites.files.UploadFile;
-import by.bsuir.courseproject.exceptions.FileStorageException;
 import by.bsuir.courseproject.service.completedtask.CompletedTaskService;
 import by.bsuir.courseproject.service.course.CourseService;
 import by.bsuir.courseproject.service.databasefile.DatabaseFileService;
@@ -12,13 +10,11 @@ import by.bsuir.courseproject.service.task.TaskService;
 import by.bsuir.courseproject.service.trainer.TrainerService;
 import by.bsuir.courseproject.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,17 +29,19 @@ public class CommonGetController {
     private final TrainerService trainerService;
     private final CourseService courseService;
     private final UserService userService;
+    private final DatabaseFileService databaseFileService;
 
 
     @Autowired
     public CommonGetController(StudentService studentService, TaskService taskService, CompletedTaskService completedTaskService, TrainerService trainerService,
-                               CourseService courseService, UserService userService) {
+                               CourseService courseService, UserService userService, DatabaseFileService databaseFileService) {
         this.userService = userService;
         this.courseService = courseService;
         this.studentService = studentService;
         this.taskService = taskService;
         this.completedTaskService = completedTaskService;
         this.trainerService = trainerService;
+        this.databaseFileService = databaseFileService;
     }
 
     @GetMapping(value = "/")
@@ -177,18 +175,24 @@ public class CommonGetController {
     public ResponseEntity<User> getCurrentUser(Authentication authentication) {
         ResponseEntity<User> responseEntityNotFound = new ResponseEntity<>(HttpStatus.NOT_FOUND);
         String name = authentication.getName();
-        System.out.println(name);
         Optional<User> userOptional = userService.getUserByLogin(name);
         return userOptional.map((user) -> new ResponseEntity<>(user, HttpStatus.OK)
         ).orElse(responseEntityNotFound);
     }
 
     @PostMapping(value = "/getImage/{login}", produces = "application/json")
-    public ResponseEntity<DatabaseFile> getImage(@PathVariable("login") String username) {
+    public ResponseEntity<byte[]> getImage(@PathVariable("login") String username) {
         Optional<User> userOptional = userService.getUserByLogin(username);
-        System.out.println(userOptional);
-        return userOptional.map((user) -> new ResponseEntity<>(user.getImage(), HttpStatus.OK)
-        ).orElse(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+        if(userOptional.isPresent()) {
+            System.out.println(userOptional);
+            Optional<DatabaseFile> databaseFileOptional = databaseFileService.findById(userOptional.get().getImage().getId());
+            if(databaseFileOptional.isPresent()) {
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + databaseFileOptional.get().getFileName() + "\"")
+                        .body(databaseFileOptional.get().getData());
+            }
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
 

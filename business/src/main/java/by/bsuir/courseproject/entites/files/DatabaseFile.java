@@ -1,5 +1,6 @@
 package by.bsuir.courseproject.entites.files;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -27,5 +28,6 @@ public class DatabaseFile {
 
     @Lob
     @NonNull
+    @JsonIgnore
     private byte[] data;
 }

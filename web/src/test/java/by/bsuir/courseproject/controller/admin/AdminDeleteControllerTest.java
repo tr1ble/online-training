@@ -1,9 +1,6 @@
 package by.bsuir.courseproject.controller.admin;
 
 import by.bsuir.courseproject.Application;
-import by.bsuir.courseproject.entites.Course;
-import by.bsuir.courseproject.entites.Role;
-import by.bsuir.courseproject.entites.Trainer;
 import by.bsuir.courseproject.entites.User;
 import by.bsuir.courseproject.service.course.CourseService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,12 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 

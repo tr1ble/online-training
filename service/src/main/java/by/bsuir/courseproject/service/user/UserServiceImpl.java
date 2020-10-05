@@ -1,14 +1,12 @@
 package by.bsuir.courseproject.service.user;
 
 
-import by.bsuir.courseproject.entites.Course;
 import by.bsuir.courseproject.entites.Role;
 import by.bsuir.courseproject.entites.User;
 import by.bsuir.courseproject.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,6 +64,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        System.out.println(user);
         userRepository.save(user);
     }
 

@@ -1,6 +1,6 @@
 package by.bsuir.courseproject.controller.admin;
 
-import by.bsuir.courseproject.entites.*;
+import by.bsuir.courseproject.entites.User;
 import by.bsuir.courseproject.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

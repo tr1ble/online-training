@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface DatabaseFileService {
     Optional<DatabaseFile> findById(int databaseFileId);
     DatabaseFile store(MultipartFile file) throws FileStorageException;
+    void remove(int id);
 }

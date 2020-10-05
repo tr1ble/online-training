@@ -53,6 +53,7 @@ public class AuthenticationController {
             response.put(ROLE, user.get().getRole());
             return ResponseEntity.ok(response);
         } catch (AuthenticationException ex) {
+            ex.printStackTrace();
             throw new BadCredentialsException("Invalid password");
         }
     }

@@ -1,26 +1,25 @@
 package by.bsuir.courseproject.controller.common;
 
+import by.bsuir.courseproject.entites.Request;
 import by.bsuir.courseproject.entites.Role;
 import by.bsuir.courseproject.entites.User;
 import by.bsuir.courseproject.entites.files.DatabaseFile;
+import by.bsuir.courseproject.entites.files.UploadFile;
 import by.bsuir.courseproject.exceptions.FileStorageException;
-import by.bsuir.courseproject.service.completedtask.CompletedTaskService;
-import by.bsuir.courseproject.service.course.CourseService;
 import by.bsuir.courseproject.service.databasefile.DatabaseFileService;
-import by.bsuir.courseproject.service.student.StudentService;
-import by.bsuir.courseproject.service.task.TaskService;
-import by.bsuir.courseproject.service.trainer.TrainerService;
+import by.bsuir.courseproject.service.request.RequestService;
 import by.bsuir.courseproject.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.MultipartConfigElement;
-import javax.servlet.annotation.MultipartConfig;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
@@ -31,9 +30,11 @@ public class CommonAddController {
 
     private final UserService userService;
     private final DatabaseFileService databaseFileService;
+    private final RequestService requestService;
 
     @Autowired
-    public CommonAddController(UserService userService, DatabaseFileService databaseFileService) {
+    public CommonAddController(UserService userService, DatabaseFileService databaseFileService, RequestService requestService) {
+        this.requestService = requestService;
         this.userService = userService;
         this.databaseFileService = databaseFileService;
     }
@@ -50,19 +51,28 @@ public class CommonAddController {
         }
     }
 
-    @PostMapping(value = "/uploadImage/{login}")
-    public ResponseEntity<User> uploadImage(@RequestParam(value="formData", required = false) MultipartFile file, @PathVariable String login) throws FileStorageException {
-        if(file!=null) {
-            Optional<User> userOptional = userService.getUserByLogin(login);
-            DatabaseFile databaseFile = databaseFileService.store(file);
-            if (userOptional.isPresent()) {
-                User user = userOptional.get();
-                user.setImage(databaseFile);
-                userService.add(user);
-                return ResponseEntity.ok(user);
-            }
+    @PostMapping(value = {"/request"}, consumes = "application/json")
+    public ResponseEntity<String> addRequest(@RequestBody(required = false)Request request, Authentication authentication) {
+        List<Request> requestList = requestService.findByUserLogin(authentication.getName());
+        if(requestList.stream().filter((Request r)-> r.getRequestType().getValue().equals(request.getRequestType().getValue())).collect(Collectors.toList()).size()==0) {
+            requestService.add(request);
+            return ResponseEntity.ok("New request is registered");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You already have request of that type!");
         }
-        System.out.println(file);
+    }
+
+
+    @PostMapping(value = "/uploadImage/{login}")
+    public ResponseEntity<String> uploadImage(@RequestParam(value="file") MultipartFile file, @PathVariable String login) throws FileStorageException {
+        Optional<User> userOptional = userService.getUserByLogin(login);
+        DatabaseFile databaseFile = databaseFileService.store(file);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setImage(databaseFile);
+            userService.add(user);
+            return ResponseEntity.ok("Image is uploaded");
+        }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

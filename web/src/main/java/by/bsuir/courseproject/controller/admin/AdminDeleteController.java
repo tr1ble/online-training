@@ -3,6 +3,7 @@ package by.bsuir.courseproject.controller.admin;
 import by.bsuir.courseproject.entites.CompletedTask;
 import by.bsuir.courseproject.service.completedtask.CompletedTaskService;
 import by.bsuir.courseproject.service.course.CourseService;
+import by.bsuir.courseproject.service.databasefile.DatabaseFileService;
 import by.bsuir.courseproject.service.student.StudentService;
 import by.bsuir.courseproject.service.task.TaskService;
 import by.bsuir.courseproject.service.trainer.TrainerService;
@@ -28,6 +29,7 @@ public class AdminDeleteController {
     private static final String USERNAME = "username";
     private static final String TASK_ID = "taskId";
     private static final String STUDENT_ID = "studentId";
+    private static final String FILE_ID = "fileId";
     private static final String COMPLETED_TASK_ID = "completedTaskId";
 
     private final TrainerService trainerService;
@@ -36,15 +38,17 @@ public class AdminDeleteController {
     private final UserService userService;
     private final CompletedTaskService completedTaskService;
     private final StudentService studentService;
+    private final DatabaseFileService databaseFileService;
 
     @Autowired
-    public AdminDeleteController(TrainerService trainerService, CourseService courseService, TaskService taskService, UserService userService, CompletedTaskService completedTaskService, StudentService studentService) {
+    public AdminDeleteController(TrainerService trainerService, CourseService courseService, TaskService taskService, UserService userService, CompletedTaskService completedTaskService, StudentService studentService, DatabaseFileService databaseFileService) {
         this.completedTaskService = completedTaskService;
         this.trainerService = trainerService;
         this.courseService = courseService;
         this.taskService = taskService;
         this.userService = userService;
         this.studentService = studentService;
+        this.databaseFileService = databaseFileService;
     }
 
 
@@ -82,5 +86,11 @@ public class AdminDeleteController {
     public ResponseEntity<Integer> deleteStudent(@PathVariable(STUDENT_ID) int studentId) {
         studentService.remove(studentId);
         return ResponseEntity.ok(studentId);
+    }
+
+    @DeleteMapping(value = {"/file/{fileId}"})
+    public ResponseEntity<Integer> deleteFile(@PathVariable(FILE_ID) int fileId) {
+        databaseFileService.remove(fileId);
+        return ResponseEntity.ok(fileId);
     }
 }

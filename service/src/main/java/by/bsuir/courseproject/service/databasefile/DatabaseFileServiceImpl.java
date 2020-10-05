@@ -43,5 +43,10 @@ public class DatabaseFileServiceImpl implements DatabaseFileService {
         }
     }
 
+    @Override
+    public void remove(int id) {
+        databaseFileRepository.deleteById(id);
+    }
+
 
 }

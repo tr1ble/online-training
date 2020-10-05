@@ -3,25 +3,20 @@ package by.bsuir.courseproject.controller.admin;
 import by.bsuir.courseproject.entites.*;
 import by.bsuir.courseproject.service.completedtask.CompletedTaskService;
 import by.bsuir.courseproject.service.course.CourseService;
+import by.bsuir.courseproject.service.request.RequestService;
 import by.bsuir.courseproject.service.student.StudentService;
 import by.bsuir.courseproject.service.task.TaskService;
 import by.bsuir.courseproject.service.trainer.TrainerService;
 import by.bsuir.courseproject.service.user.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -33,15 +28,17 @@ public class AdminEditController {
     private final UserService userService;
     private final CompletedTaskService completedTaskService;
     private final StudentService studentService;
+    private final RequestService requestService;
 
     @Autowired
-    public AdminEditController(TrainerService trainerService, CourseService courseService, TaskService taskService, UserService userService, CompletedTaskService completedTaskService, StudentService studentService) {
+    public AdminEditController(TrainerService trainerService, CourseService courseService, TaskService taskService, UserService userService, CompletedTaskService completedTaskService, StudentService studentService, RequestService requestService) {
         this.completedTaskService = completedTaskService;
         this.trainerService = trainerService;
         this.courseService = courseService;
         this.taskService = taskService;
         this.userService = userService;
         this.studentService = studentService;
+        this.requestService = requestService;
     }
 
     @PutMapping(value = {"/course"}, consumes = "application/json", produces = "application/json")
@@ -86,5 +83,27 @@ public class AdminEditController {
     public ResponseEntity<CompletedTask> editCompletedTask(@RequestBody CompletedTask completedTask) {
         completedTaskService.update(completedTask);
         return ResponseEntity.ok(completedTask);
+    }
+
+    @PutMapping(value = {"/request"}, consumes = "application/json")
+    public ResponseEntity<String> handleRequest(@RequestBody(required = false)Request request) {
+        Optional<User> userOptional = userService.getUserByLogin(request.getUser().getLogin());
+        if(userOptional.isPresent()) {
+            User user = userOptional.get();
+            switch (request.getRequestType()) {
+                case ROLE:
+                    user.setRole(Role.valueOf(request.getValue()));
+                    break;
+                case LOGIN:
+                    user.setLogin(request.getValue());
+                    break;
+                default:
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong request type");
+            }
+            userService.update(user);
+            return ResponseEntity.ok("Request was successfully handled!");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No such a user");
+        }
     }
 }
