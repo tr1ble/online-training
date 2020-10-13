@@ -19,7 +19,7 @@ class AuthPage extends React.PureComponent<AuthPageProps> {
     @observable activeClass:string= 'menuRoot';
 
     componentDidMount() {
-        this.props.authState.autoLogin();
+       this.props.authState.autoLogin();
         window.addEventListener('scroll', this.handleScroll);
     }
 

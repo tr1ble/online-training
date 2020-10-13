@@ -4,8 +4,7 @@ import { loginAttempt, register } from "api/auth";
 import history from "global/history";
 import { getProfileImage, uploadProfileImage } from "api/profile";
 
-
-configure( {enforceActions: "observed"});
+configure({enforceActions: "observed"});
 
 class AuthState {
     @observable login: string = '';
@@ -17,13 +16,16 @@ class AuthState {
 
     @observable picture:any = null;
 
+    @observable logged:boolean = false;
+
     @observable isAlertVisible = false;
     @observable message = "";
     @observable alertType = "";
 
     @action toLogin = async ({login, password, remember}:{login:string; password:string; remember: boolean}) => {
         try {
-            const {token,role} = await loginAttempt({login, password});
+            const { token,role } = await loginAttempt({login, password});
+            const picture = await getProfileImage(token, login);
             runInAction(()=> {
                 this.login = login;
                 this.authorized = true;
@@ -31,6 +33,7 @@ class AuthState {
                 this.role = role;
                 this.token = token;
                 this.remember=remember;
+                this.picture = picture;
             });
             localStorage.setItem("login", login);
             localStorage.setItem("role", role);
@@ -38,19 +41,18 @@ class AuthState {
             localStorage.setItem("token", token);
             localStorage.setItem("password", password);
             localStorage.setItem("remember", remember+"");
-            this.picture = await getProfileImage(this.login);
-            history.push('/main');
         } catch (error) {
             this.showAlert("Неверный логин или пароль", "login")
         }
     };
 
     @action uploadImage = async ({image}:{image:File}) => {
-      await uploadProfileImage(this.login, image);
+      await uploadProfileImage(this.token,this.login, image);
       action(()=>{this.picture = image});
     }
 
     @action autoLogin = async () => {
+      if(!this.logged) {
       try {
           const login = localStorage.getItem("login");
           const role = localStorage.getItem("role");
@@ -65,12 +67,14 @@ class AuthState {
             resRole == "ROLE_DEFAULT"
           ) {
             if (login && remember) {
+              this.logged=true;
               this.toLogin({login, password, remember});
             }
           }
         } catch (error) {
           console.log(error);
         }
+      }
       };
 
     @action logout = () => {

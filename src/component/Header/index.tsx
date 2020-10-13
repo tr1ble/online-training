@@ -1,6 +1,8 @@
 import ProfileWindow from "component/ProfileWindow";
+import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import React from 'react';
+
 
 import "./style.sass";
 
@@ -16,10 +18,11 @@ interface HeaderProps {
 @observer
 class Header extends React.PureComponent<HeaderProps> {
 
+    @observable isProfilevisible:boolean = false;
+
     render() {
         const { login, picture } = this.props.authState;
         const { profileState } = this.props;
-        const { isProfileVisible } = this.props.profileState;
         return (
             <div className={'header-container'}>
                 <div className={'header-content'}>
@@ -27,9 +30,9 @@ class Header extends React.PureComponent<HeaderProps> {
                         <div className={'header-controls'}>
                         </div>
                         <div className={'header-controls'}
-                        onClick={() => {
-                            profileState.handleProfile();
-                          }}>
+                        onClick={action(() => {
+                            this.isProfilevisible = profileState.handleProfile(this.isProfilevisible);
+                          })}>
                             <div className={'header-control'}>
                                 {login} 
                             </div>
@@ -40,7 +43,7 @@ class Header extends React.PureComponent<HeaderProps> {
                         </div>
                     </header>
                 </div>
-                {isProfileVisible && (
+                {this.isProfilevisible && (
                     <ProfileWindow/>)}
             </div>
         );

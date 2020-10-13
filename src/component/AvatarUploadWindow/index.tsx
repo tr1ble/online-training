@@ -32,13 +32,13 @@ class AvatarUploadWindow extends React.PureComponent<AvatarUploadWindowProps> {
         return (
             <div className={'avatar-container'}>
                 <ImageUploader
-                buttonClassName={'avatar-button'}
-                singleImage={true}
-                withIcon={true}
-                imgExtension={['.jpg', '.gif', '.png', '.gif']}
-                maxFileSize={5242880}
-                onChange={this.onCrop}
-                buttonText="Выбрать картинку"/>
+                    buttonClassName={'avatar-button'}
+                    singleImage={true}
+                    withIcon={true}
+                    imgExtension={['.jpg', '.gif', '.png']}
+                    maxFileSize={5242880}
+                    onChange={this.onCrop}
+                    buttonText="Выбрать картинку"/>
                 <button className='avatar-button' onClick={this.onSubmit}>
                     СОХРАНИТЬ
                 </button>

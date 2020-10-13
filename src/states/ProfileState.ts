@@ -6,12 +6,13 @@ class ProfileState {
     
     @observable isProfileWindowVisible:boolean = false;
 
-    @action handleProfile = () => {
-        if(this.isProfileWindowVisible) {
+    @action handleProfile = (isProfileWindowVisible: boolean) => {
+        if(isProfileWindowVisible) {
             this.hideProfile();
         } else {
             this.showProfile();
         }
+        return this.isProfileWindowVisible;
     }
 
     @action showProfile = () => {

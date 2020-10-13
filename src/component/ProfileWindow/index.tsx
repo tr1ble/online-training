@@ -25,6 +25,7 @@ class ProfileWindow extends React.PureComponent<ProfileWindowProps> {
               <div className={'profile-block'}>
                 <div className={'profile-info'}>
                     {(picture==null) && (<img src='/images/user-white.png' alt='User profile image' className={'image-profile--big'}/>)}
+                    {(picture!=null) && (<img src={picture} alt='User profile image' className={'image-profile--big'}/>)}
                     <div className={'profile-name'}>
                       <span>{login}</span>
                       <a className={'profile-image-change'} onClick={() => {
@@ -33,8 +34,7 @@ class ProfileWindow extends React.PureComponent<ProfileWindowProps> {
                             } else {
                                 this.showAvatarUpload();
                             }
-                          }}
-                      >Изменить аватар</a>
+                          }}>Изменить аватар</a>
                     </div>
                 </div>
                 <div className={'profile-entry'}>

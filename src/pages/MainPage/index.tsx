@@ -31,7 +31,7 @@ class MainPage extends React.PureComponent<MainPageProps> {
                 <Header/>
                 <div className={'main-container'}>
                   <div className={'main-content'}>
-
+                    
                   </div>
                 </div>
               </div>

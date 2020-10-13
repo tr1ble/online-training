@@ -30,3 +30,32 @@
 .main-container 
     position: relative
     height: 100%
+
+.main-button
+    -webkit-flex: 1 0 0
+    -ms-flex: 1 0 0
+    flex: 1 0 0
+    position: relative
+    display: inline-block
+    padding: .1em 1.2em 0
+    border: 1px solid #111111
+    border-radius: .3em
+    line-height: 2.2em
+    vertical-align: middle
+    color: #111111
+    text-align: center
+    opacity: .7
+    transition: opacity .25s,color 275ms
+    transition-timing-function: cubic-bezier(.4,.25,.3,1)
+    -webkit-backface-visibility: hidden
+    backface-visibility: hidden
+    background-color: transparent
+
+    @media only screen and (min-width: 40.063em)
+        -webkit-flex: 0 1 auto
+        -ms-flex: 0 1 auto
+        flex: 0 1 auto
+
+    &:hover
+        opacity: 1
+        cursor: pointer

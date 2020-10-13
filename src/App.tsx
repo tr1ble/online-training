@@ -17,7 +17,9 @@ interface AppProps {
 class App extends React.PureComponent<AppProps> {
 
   getRoutes() {
-    const actualRoutes = routes.mainRoutes.concat(routes.authRoutes);
+    const { authorized, remember } = this.props.authState;
+    const actualRoutes = authorized && remember ? routes.mainRoutes : routes.authRoutes;
+
     return actualRoutes.map(r => (
       <Route
         key={r.path}

@@ -4,7 +4,7 @@ import React from 'react'
 import { ValidatorForm } from 'react-material-ui-form-validator';
 
 import './style.sass';
-import CssTextValidator from '../controls/CssTextValidator';
+import CssLightTextValidator from '../controls/CssLightTextValidator';
 import { action, observable } from 'mobx';
 
 
@@ -76,7 +76,7 @@ class RegisterForm extends React.PureComponent<RegisterProps> {
                 <Grid 
                 container
                 justify='center'
-                className={'page-top form-container'}>
+                className={'page-top--register form-container'}>
                     <ValidatorForm
                         onSubmit={this.onSubmit}
                         className={'registration-form'}
@@ -88,7 +88,7 @@ class RegisterForm extends React.PureComponent<RegisterProps> {
                                     justify='center'
                                     spacing={5}>
                                         <Grid item className={'register-input'}>
-                                            <CssTextValidator
+                                            <CssLightTextValidator
                                                 label='Имя пользователя'
                                                 onChange={this.handleChange}
                                                 name='login'
@@ -99,7 +99,7 @@ class RegisterForm extends React.PureComponent<RegisterProps> {
                                             />
                                         </Grid>
                                         <Grid item>
-                                            <CssTextValidator
+                                            <CssLightTextValidator
                                                 label='Пароль'
                                                 onChange={this.handleChange}
                                                 name='password'
@@ -111,7 +111,7 @@ class RegisterForm extends React.PureComponent<RegisterProps> {
                                             />
                                         </Grid>
                                         <Grid item >
-                                            <CssTextValidator
+                                            <CssLightTextValidator
                                                 label='Повторите пароль'
                                                 onChange={this.handleChange}
                                                 name='passwordRep'
@@ -123,7 +123,7 @@ class RegisterForm extends React.PureComponent<RegisterProps> {
                                             />
                                         </Grid>
                                         <Grid item>
-                                            <CssTextValidator
+                                            <CssLightTextValidator
                                                 label='Электронная почта'
                                                 onChange={this.handleChange}
                                                 name='email'

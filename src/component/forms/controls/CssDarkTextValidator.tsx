@@ -3,27 +3,27 @@ import {
   } from '@material-ui/core/styles';
   import { TextValidator} from 'react-material-ui-form-validator';
 
-  const CssTextValidator = withStyles({
+  const CssDarkTextValidator = withStyles({
     root: {
       '& .MuiInput-underline:before': {
-        borderBottomColor: 'white',
+        borderBottomColor: 'black',
       },
       '& .MuiInput-underline': {
-        borderBottomColor: 'white',
+        borderBottomColor: 'black',
       },
       '& .MuiInputBase-input': {
         width: '290px',
-        color: 'white',
+        color: 'black',
       },
       '& .MuiFormLabel-root': {
-        color: '#f6e770',
+        color: 'black',
       },
       '& .MuiOutlinedInput-root': {
         '& fieldset': {
-          borderColor: 'white',
+          borderColor: 'black',
         },
       },
     },
   })(TextValidator);
 
-  export default CssTextValidator;
+  export default CssDarkTextValidator;

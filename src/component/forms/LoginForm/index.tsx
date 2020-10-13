@@ -1,5 +1,5 @@
 import { FormControlLabel,Checkbox} from '@material-ui/core';
-import { CssTextValidator } from 'component';
+import { CssLightTextValidator } from 'component';
 import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import React from 'react'
@@ -54,7 +54,7 @@ class LoginForm extends React.PureComponent<LoginProps> {
                       name="login"
                       onSubmit={this.onSubmit}>
                       <div className={"user-box"}>
-                        <CssTextValidator
+                        <CssLightTextValidator
                           label='Имя пользователя'
                           name='login'
                           color='secondary'
@@ -62,7 +62,7 @@ class LoginForm extends React.PureComponent<LoginProps> {
                         />
                       </div>
                       <div className={"user-box"}>
-                        <CssTextValidator
+                        <CssLightTextValidator
                           label='Пароль'
                           name='password'
                           color='secondary'
