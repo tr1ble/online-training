@@ -9,14 +9,13 @@ export async function getProfileImage(token: string, login: string){
         return response.data;
 }
 
-export async function uploadProfileImage(token: string | null, login: string, file:File){
+export async function uploadProfileImage(login: string, file:File){
         const instance = await getInstance();
         let formData = new FormData();
         formData.append("file", file);
         const response = await instance.post("/uploadImage/"+login, formData, {
                 headers: {
                   'Content-Type': 'multipart/form-data',
-                  'authorization': token
                 }});
         return response.data;
 }

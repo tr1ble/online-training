@@ -37,8 +37,8 @@ class Header extends React.PureComponent<HeaderProps> {
                                 {login} 
                             </div>
                             <div className={'header-control'}>
-                                {(picture==null) && (<img src='/images/user.png' alt='User profile image' className={'image-profile'}/>)}
-                                {(picture!=null) && (<img src={picture} alt='User profile image' className={'image-profile'}/>)}
+                                {(picture==null || picture==undefined) && (<img src='/images/user.png' alt='User profile image' className={'image-profile'}/>)}
+                                {(picture!=null || picture!=undefined) && (<img src={picture} alt='User profile image' className={'image-profile'}/>)}
                             </div>
                         </div>
                     </header>

@@ -57,6 +57,7 @@ class ProfileWindow extends React.PureComponent<ProfileWindowProps> {
                     <a onClick={()=>  {
                       logout();
                       history.push("/");
+                      window.location.reload();
                     }}>Выйти</a>
                   </div>
                 </div>

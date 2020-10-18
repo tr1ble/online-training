@@ -18,7 +18,7 @@ class App extends React.PureComponent<AppProps> {
 
   getRoutes() {
     const { authorized, remember } = this.props.authState;
-    const actualRoutes = authorized && remember ? routes.mainRoutes : routes.authRoutes;
+    const actualRoutes = authorized==true && remember==true ? routes.mainRoutes : routes.authRoutes;
 
     return actualRoutes.map(r => (
       <Route

@@ -13,7 +13,7 @@ ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <Provider {...states}>
-        <App />
+        <App/>
       </Provider>
     </ThemeProvider>
   </React.StrictMode>,

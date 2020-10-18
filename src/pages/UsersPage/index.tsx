@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import './style.sass';
 import { observable, runInAction, action } from 'mobx';
 import { Header, Menu, UserTable } from 'component';
+import UserState from 'states/UserState';
 
 interface UsersPageProps {
     authState?: any;
@@ -11,12 +12,18 @@ interface UsersPageProps {
 
 
 @inject('authState')
+@inject('userState')
 @observer
 class UsersPage extends React.PureComponent<UsersPageProps> {
     
     @observable isLoginVisible = false;
     @observable activeClass: string = 'menuRoot';
 
+
+    componentDidMount() {
+        const { initUsers } = this.props.userState;
+        initUsers();
+    }
 
     @action handleScroll = async () => {
         if (window.pageYOffset == 0) {
@@ -26,14 +33,9 @@ class UsersPage extends React.PureComponent<UsersPageProps> {
         }
     };
 
-    componentDidMount() {
-        const { initAdminPage } = this.props.userState;
-        initAdminPage();
-    }
-
-
-
     render() {
+        let userState:UserState = this.props.userState;
+        const { users } = this.props.userState;
         return (
             <div className={'pageContainer--main'} onScroll={this.handleScroll}>
                 <Menu />
@@ -41,7 +43,9 @@ class UsersPage extends React.PureComponent<UsersPageProps> {
                     <Header />
                     <div className={'main-container'}>
                         <div className={'main-content'}>
-                          <UserTable/>
+                            <div className='user-table'>
+                                <UserTable {...userState} users={users}/>
+                            </div>
                         </div>
                     </div>
                 </div>

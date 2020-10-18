@@ -6,7 +6,7 @@ import { ValidatorForm } from 'react-material-ui-form-validator';
 import './style.sass';
 import CssLightTextValidator from '../controls/CssLightTextValidator';
 import { action, observable } from 'mobx';
-
+import history from "global/history";
 
 interface RegisterProps {
     authState?: any;
@@ -45,6 +45,7 @@ class RegisterForm extends React.PureComponent<RegisterProps> {
     onSubmit = () => {
             const { authState } = this.props;
             authState.tryRegister({login:this.login,password:this.password,email:this.email});
+            history.push('/');
     };
 
     @action handleChange = (event: React.FormEvent<HTMLInputElement>) => {

@@ -3,18 +3,24 @@ import { action, configure, observable, runInAction } from "mobx";
 
 configure({enforceActions: 'observed'})
 
+interface User {
+    login: string | number;
+    password: string | number;
+    role: string | number;
+    email: string | number;
+}
+
 class UserState {
     
-    @observable users=[];
+    @observable users:User[]=[];
 
-    @action initUsers = async () => {
+    @action initUsers = () => {
         this.getAllUsers();
     }
 
     @action clearUsers = async () => {
         this.users=[];
     }
-    
 
     @action getAllUsers = async () => {
         try {
@@ -26,4 +32,7 @@ class UserState {
             console.log(error);
         }
     }
+  static UserState: any;
 }
+
+export default UserState;

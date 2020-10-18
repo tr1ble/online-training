@@ -1,3 +1,5 @@
+export { default as UserTable } from "./tables/UserTable/UserTable"
+
 export { default as LoginForm } from "./forms/LoginForm"
 export { default as RegisterForm } from "./forms/RegisterForm"
 
@@ -9,5 +11,3 @@ export { default as Menu } from "./Menu"
 
 export { default as ProfileWindow } from "./ProfileWindow"
 export { default as AvatarUploadWindow } from "./AvatarUploadWindow"
-
-export { default as UserTable } from "./tables/UserTable"

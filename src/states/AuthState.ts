@@ -1,8 +1,8 @@
 import { action, observable, runInAction, configure } from "mobx";
 import { loginAttempt, register } from "api/auth";
 
-import history from "global/history";
 import { getProfileImage, uploadProfileImage } from "api/profile";
+import history from "global/history";
 
 configure({enforceActions: "observed"});
 
@@ -25,20 +25,21 @@ class AuthState {
     @action toLogin = async ({login, password, remember}:{login:string; password:string; remember: boolean}) => {
         try {
             const { token,role } = await loginAttempt({login, password});
-            const picture = await getProfileImage(token, login);
             runInAction(()=> {
                 this.login = login;
                 this.authorized = true;
                 this.password = password;
                 this.role = role;
                 this.token = token;
+                localStorage.setItem("token", token);
                 this.remember=remember;
-                this.picture = picture;
+                getProfileImage(token, login).then(action((result) =>{
+                  this.picture=result;
+                }));
             });
             localStorage.setItem("login", login);
             localStorage.setItem("role", role);
             localStorage.setItem("authorized", "true");
-            localStorage.setItem("token", token);
             localStorage.setItem("password", password);
             localStorage.setItem("remember", remember+"");
         } catch (error) {
@@ -47,7 +48,7 @@ class AuthState {
     };
 
     @action uploadImage = async ({image}:{image:File}) => {
-      await uploadProfileImage(this.token,this.login, image);
+      await uploadProfileImage(this.login, image);
       action(()=>{this.picture = image});
     }
 
@@ -91,9 +92,9 @@ class AuthState {
         localStorage.setItem("role", "");
         localStorage.setItem("password", "");
         localStorage.setItem("token", "");
-        localStorage.setItem("authrized", "false");
+        localStorage.setItem("authorized", "false");
         localStorage.setItem("remember", "false");
-        history.push('/');
+        
     };
 
     @action hideAlert = (alertType:string) => {
@@ -138,6 +139,7 @@ class AuthState {
           });
           let remember:boolean=true;
           await this.toLogin({login,password,remember});
+          history.goBack();
         } catch (error) {
           this.showAlert("Ошибка регистрации", "register");
         }

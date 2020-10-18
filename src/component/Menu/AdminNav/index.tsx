@@ -6,6 +6,7 @@ import { faGraduationCap } from '@fortawesome/free-solid-svg-icons'
 import { faChalkboardTeacher } from '@fortawesome/free-solid-svg-icons'
 
 import "./style.sass";
+import history from "global/history";
 
 interface AdminNavProps {
     authState?: any;
@@ -38,7 +39,7 @@ class AdminNav extends React.PureComponent<AdminNavProps> {
                                 </a>
                             </div>
                             <div className={'nav-item'}>
-                                <a className={'menu-item nav-inner-item'} href='/users'>
+                                <a className={'menu-item nav-inner-item'} onClick={()=> history.push('/users')}>
                                     <i className={'ico ico--bar'}>
                                         <FontAwesomeIcon icon={faAddressCard}/>    
                                     </i>
