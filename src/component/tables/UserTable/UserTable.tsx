@@ -15,6 +15,7 @@ import {
     TableContainer,
     TableBody,
     TablePagination,
+    NativeSelect,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -42,8 +43,8 @@ interface HeadCell {
 const headCells: HeadCell[] = [
     { id: 'login', numeric: false, disablePadding: true, label: 'Логин' },
     { id: 'password', numeric: false, disablePadding: false, label: 'Пароль' },
-    { id: 'role', numeric: false, disablePadding: false, label: 'Электронная почта' },
-    { id: 'email', numeric: false, disablePadding: false, label: 'Роль' },
+    { id: 'email', numeric: false, disablePadding: false, label: 'Электронная почта' },
+    { id: 'role', numeric: false, disablePadding: false, label: 'Роль' },
 ];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -364,7 +365,20 @@ const UserTable = inject('userState')(
                                                 </TableCell>
                                                 <TableCell align="right">{row.password}</TableCell>
                                                 <TableCell align="right">{row.email}</TableCell>
-                                                <TableCell align="right">{row.role}</TableCell>
+                                                <TableCell align="right">
+                                                    <NativeSelect
+                                                        defaultValue={row.role}
+                                                        inputProps={{
+                                                            name: 'role',
+                                                            id: 'uncontrolled-native',
+                                                        }}
+                                                        >
+                                                        <option value={"ROLE_ADMINISTRATOR"}>Администратор</option>
+                                                        <option value={"ROLE_TRAINER"}>Тренер</option>
+                                                        <option value={"ROLE_STUDENT"}>Студент</option>
+                                                        <option value={"ROLE_DEFAULT"}>Обычный пользователь</option>
+                                                    </NativeSelect>
+                                                </TableCell>
                                             </TableRow>
                                         );
                                     })}
@@ -393,5 +407,6 @@ const UserTable = inject('userState')(
         );
     }),
 );
+
 
 export default UserTable;
