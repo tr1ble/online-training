@@ -6,6 +6,7 @@ import by.bsuir.training.service.student.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,17 +27,20 @@ public class StudentController {
     }
 
     @PostMapping(value = {"/registration"}, consumes = "application/json")
+    @Secured({"ROLE_DEFAULT"})
     public Student registration(@RequestBody Student student)  {
         return studentService.add(student);
     }
 
     @PostMapping(value = {"/unregister"}, consumes = "application/json")
+    @Secured({"ROLE_STUDENT"})
     public void unregister(@RequestBody Map<String, Integer> data)  {
         studentService.remove(data.get(STUDENT_ID));
     }
 
 
     @PostMapping("/uploadFile")
+    @Secured({"ROLE_STUDENT"})
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
         try {

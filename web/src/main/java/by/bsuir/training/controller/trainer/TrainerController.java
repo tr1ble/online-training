@@ -9,6 +9,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -26,6 +27,7 @@ public class TrainerController {
 
 
     @GetMapping("/download/{completedTaskId}")
+    @Secured({"ROLE_TRAINER"})
     public ResponseEntity<Resource> downloadCompletedTask(@PathVariable int completedTaskId) {
 
         Optional<CompletedTask> completedTask = completedTaskService.findById(completedTaskId);

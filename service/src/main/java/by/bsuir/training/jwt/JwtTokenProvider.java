@@ -51,7 +51,7 @@ public class JwtTokenProvider {
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if(bearerToken !=null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7, bearerToken.length());
+            return bearerToken.substring(7);
         }
         return null;
     }
@@ -60,13 +60,5 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(secretToken).parseClaimsJws(token).getBody().getSubject();
     }
 
-    public boolean validateToken(String token) {
-        try {
-            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretToken).parseClaimsJws(token);
-            return !claimsJws.getBody().getExpiration().before(new Date());
-        } catch (JwtException | IllegalArgumentException ex) {
-            throw new JwtAuthException("JWT token is invalid");
-        }
-    }
 
 }

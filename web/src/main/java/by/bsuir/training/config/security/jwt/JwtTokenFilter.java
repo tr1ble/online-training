@@ -1,6 +1,7 @@
 package by.bsuir.training.config.security.jwt;
 
 import by.bsuir.training.jwt.JwtTokenProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -24,7 +25,7 @@ public class JwtTokenFilter extends GenericFilterBean {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) servletRequest);
 
-        if(token!=null && jwtTokenProvider.validateToken(token)) {
+        if(token!=null) {
             Authentication authentication = jwtTokenProvider.getAuth(token);
             if(authentication!=null) {
                 SecurityContextHolder.getContext().setAuthentication(authentication);

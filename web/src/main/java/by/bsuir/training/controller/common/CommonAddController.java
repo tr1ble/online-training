@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.security.PermitAll;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,6 +39,7 @@ public class CommonAddController {
     }
 
     @PostMapping(value = {"/register"}, consumes = "application/json")
+    @PermitAll
     public ResponseEntity<String> register(@RequestBody(required = false) User user) {
         Optional<User> userOptional = userService.getUserByLogin(user.getLogin());
         if(!userOptional.isPresent()) {
@@ -50,6 +52,7 @@ public class CommonAddController {
     }
 
     @PostMapping(value = {"/request"}, consumes = "application/json")
+    @Secured({"ROLE_STUDENT", "ROLE_ADMINISTRATOR", "ROLE_DEFAULT","ROLE_TRAINER"})
     public ResponseEntity<String> addRequest(@RequestBody(required = false)Request request, Authentication authentication) {
         List<Request> requestList = requestService.findByUserLogin(authentication.getName());
         if(requestList.stream().filter((Request r)-> r.getRequestType().getValue().equals(request.getRequestType().getValue())).collect(Collectors.toList()).size()==0) {
@@ -65,11 +68,11 @@ public class CommonAddController {
     @Secured({"ROLE_STUDENT", "ROLE_ADMINISTRATOR", "ROLE_DEFAULT","ROLE_TRAINER"})
     public ResponseEntity<String> uploadImage(@RequestParam(value="file") MultipartFile file, @PathVariable String login) throws FileStorageException {
         Optional<User> userOptional = userService.getUserByLogin(login);
-        DatabaseFile databaseFile = databaseFileService.store(file);
         if (userOptional.isPresent()) {
+            DatabaseFile databaseFile = databaseFileService.store(file);
             User user = userOptional.get();
             user.setImage(databaseFile);
-            userService.add(user);
+            userService.updateExceptPassword(user);
             return ResponseEntity.ok("Image is uploaded");
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

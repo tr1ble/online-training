@@ -163,6 +163,7 @@ public class CommonGetController {
     }
 
     @PostMapping(value = "/currentUser", produces = "application/json")
+    @Secured({"ROLE_STUDENT", "ROLE_ADMINISTRATOR", "ROLE_DEFAULT","ROLE_TRAINER"})
     public ResponseEntity<User> getCurrentUser(Authentication authentication) {
         ResponseEntity<User> responseEntityNotFound = new ResponseEntity<>(HttpStatus.NOT_FOUND);
         String name = authentication.getName();
@@ -175,16 +176,23 @@ public class CommonGetController {
     @Secured({"ROLE_STUDENT", "ROLE_ADMINISTRATOR", "ROLE_DEFAULT","ROLE_TRAINER"})
     public ResponseEntity<String> getImage(@PathVariable("login") String username) {
         Optional<User> userOptional = userService.getUserByLogin(username);
+        String body = "";
+        String databaseFileName = "";
+        String file = "null";
         if(userOptional.isPresent()) {
-            Optional<DatabaseFile> databaseFileOptional = databaseFileService.findById(userOptional.get().getImage().getId());
-            if(databaseFileOptional.isPresent()) {
-                String body = new String(Base64.getEncoder().encode(databaseFileOptional.get().getData()));
-                return ResponseEntity.ok()
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + databaseFileOptional.get().getFileName() + "\"")
-                        .body("data:image/jpg;base64,"+body);
+            DatabaseFile image = userOptional.get().getImage();
+            if (image != null) {
+                Optional<DatabaseFile> databaseFileOptional = databaseFileService.findById(image.getId());
+                if (databaseFileOptional.isPresent()) {
+                    file = "data:image/jpg;base64,";
+                    body = new String(Base64.getEncoder().encode(databaseFileOptional.get().getData()));
+                    databaseFileName = databaseFileOptional.get().getFileName();
+                }
             }
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + databaseFileName + "\"")
+                .body(file + body);
     }
 
 

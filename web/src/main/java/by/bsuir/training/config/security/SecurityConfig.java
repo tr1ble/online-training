@@ -23,6 +23,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
         prePostEnabled = true,
         jsr250Enabled = true
 )
+@ComponentScan({"by.bsuir.training.config.security", "by.bsuir.training.jwt", "by.bsuir.training.authentication"})
 public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
     private final JwtTokenProvider jwtTokenProvider;

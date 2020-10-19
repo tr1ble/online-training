@@ -11,6 +11,7 @@ import by.bsuir.training.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -83,6 +84,7 @@ public class AdminEditController {
     }
 
     @PutMapping(value = {"/request"}, consumes = "application/json")
+    @Secured({"ROLE_ADMINISTRATOR"})
     public ResponseEntity<String> handleRequest(@RequestBody(required = false)Request request) {
         Optional<User> userOptional = userService.getUserByLogin(request.getUser().getLogin());
         if(userOptional.isPresent()) {
