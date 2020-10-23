@@ -11,6 +11,8 @@ import AvatarUploadWindow from 'component/AvatarUploadWindow';
 
 interface ProfileWindowProps {
     authState?: any;
+    userState?: any;
+    trainerState?: any;
   }
 
 @inject('authState')
@@ -19,6 +21,8 @@ class ProfileWindow extends React.PureComponent<ProfileWindowProps> {
     @observable isAvatarUploadVisible:boolean = false;
     render() {
       const { login, picture, logout } = this.props.authState;
+      const { clearUsers } = this.props.userState;
+      const { clearTrainers } = this.props.trainerState;
         return(
           <div>
             <div className={'profile-popup'}>
@@ -56,6 +60,8 @@ class ProfileWindow extends React.PureComponent<ProfileWindowProps> {
                     </i>
                     <a onClick={()=>  {
                       logout();
+                      clearUsers();
+                      clearTrainers();
                       history.push("/");
                       window.location.reload();
                     }}>Выйти</a>

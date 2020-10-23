@@ -5,21 +5,21 @@ import { observable, runInAction, action } from 'mobx';
 import { Header, Menu, UserTable } from 'component';
 import UserState from 'states/UserState';
 
-interface UsersPageProps {
+interface TrainersPageProps {
     authState?: any;
-    userState?: any;
+    trainerState?: any;
 }
 
 @inject('authState')
-@inject('userState')
+@inject('trainerState')
 @observer
-class UsersPage extends React.PureComponent<UsersPageProps> {
+class TrainersPage extends React.PureComponent<TrainersPageProps> {
     @observable isLoginVisible = false;
     @observable activeClass: string = 'menuRoot';
 
     componentDidMount() {
-        const { initUsers } = this.props.userState;
-        initUsers();
+        const { initTrainers } = this.props.trainerState;
+        initTrainers();
     }
 
     @action handleScroll = async () => {
@@ -31,8 +31,8 @@ class UsersPage extends React.PureComponent<UsersPageProps> {
     };
 
     render() {
-        let userState: UserState = this.props.userState;
-        const { users, updateUser, deleteUser } = this.props.userState;
+        let trainerState: UserState = this.props.trainerState;
+        const { trainers, updateTrainer, deleteTrainer } = this.props.trainerState;
         return (
             <div className={'pageContainer--main'} onScroll={this.handleScroll}>
                 <Menu />
@@ -41,7 +41,7 @@ class UsersPage extends React.PureComponent<UsersPageProps> {
                     <div className={'main-container'}>
                         <div className={'main-content'}>
                             <div className="user-table">
-                                <UserTable {...userState} users={users} updateUser={updateUser} deleteUser={deleteUser}/>
+                                <UserTable {...trainerState} trainers={trainers} updateTrainer={updateTrainer} deleteTrainer={deleteTrainer}/>
                             </div>
                         </div>
                     </div>
@@ -63,4 +63,4 @@ class UsersPage extends React.PureComponent<UsersPageProps> {
     };
 }
 
-export default UsersPage;
+export default TrainersPage;

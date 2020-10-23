@@ -1,4 +1,4 @@
-import { getAllUsers } from "api/users";
+import { deleteUser, getAllUsers, updateUser } from "api/users";
 import { action, configure, observable, runInAction } from "mobx";
 
 configure({enforceActions: 'observed'})
@@ -7,7 +7,7 @@ interface User {
     login: string | number;
     password: string | number;
     role: string | number;
-    email: string | number;
+    email: string;
 }
 
 class UserState {
@@ -22,6 +22,17 @@ class UserState {
         this.users=[];
     }
 
+    @action updateUser = async (user:User) => {
+        updateUser(user);
+    }
+
+    @action deleteUser = async (user:string) => {
+        this.users.filter(function (ele) {
+            return ele.login != user;
+        });
+        deleteUser(user);
+    }
+
     @action getAllUsers = async () => {
         try {
             const response = await getAllUsers();
@@ -32,7 +43,6 @@ class UserState {
             console.log(error);
         }
     }
-  static UserState: any;
 }
 
 export default UserState;

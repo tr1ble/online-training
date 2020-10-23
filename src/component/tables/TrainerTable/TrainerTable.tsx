@@ -27,35 +27,61 @@ import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import React, { ChangeEvent } from 'react';
 import { useEffect } from 'react';
-import UserState from 'states/UserState';
+import TrainerState from 'states/TrainerState';
 import { getComparator, Order, stableSort } from '../Sort/sort';
 
-interface User {
-    login: string | number;
-    password: string | number;
-    role: string | number;
-    email: string;
+class TableTrainer {
+    id: string | number;
+    name: string;
+    busy: string;
+    user: string;
+
+    constructor(id: string | number, name: string ,busy: string,user: string) {
+        this.id = id;
+        this.name = name;
+        this.busy=busy;
+        this.user = user;
+    }
 }
+
+class Trainer {
+    id: string | number;
+    firstname: string;
+    secondname: string;
+    surname: string;
+    busy: boolean;
+    user: string;
+
+    constructor(id: string | number,surname: string, firstname: string, secondname: string,busy: boolean,user: string) {
+        this.id = id;
+        this.firstname = firstname;
+        this.secondname = secondname;
+        this.surname = surname;
+        this.busy=busy;
+        this.user = user;
+    }
+}
+
 
 interface HeadCell {
     disablePadding: boolean;
-    id: keyof User;
+    id: keyof TableTrainer;
     label: string;
     numeric: boolean;
 }
 
 const headCells: HeadCell[] = [
-    { id: 'login', numeric: false, disablePadding: true, label: 'Логин' },
-    { id: 'password', numeric: false, disablePadding: false, label: 'Пароль' },
-    { id: 'email', numeric: false, disablePadding: false, label: 'Электронная почта' },
-    { id: 'role', numeric: false, disablePadding: false, label: 'Роль' },
+    { id: 'id', numeric: false, disablePadding: true, label: 'ID' },
+    { id: 'name', numeric: false, disablePadding: false, label: 'ФИО' },
+    { id: 'user', numeric: false, disablePadding: false, label: 'Логин' },
+    { id: 'busy', numeric: false, disablePadding: false, label: 'Курсы' },
 ];
 
 
 interface EnhancedTableProps {
     classes: ReturnType<typeof useStyles>;
     numSelected: number;
-    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof User) => void;
+    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof TableTrainer) => void;
     onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
     order: Order;
     orderBy: string;
@@ -90,7 +116,7 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
 function EnhancedTableHead(props: EnhancedTableProps) {
     const classesTheme = useToolbarStyles();
     const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-    const createSortHandler = (property: keyof User) => (event: React.MouseEvent<unknown>) => {
+    const createSortHandler = (property: keyof TableTrainer) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
     };
 
@@ -135,34 +161,36 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 interface EnhancedTableToolbarProps {
     numSelected: number;
     numChanged: number;
-    selectedUsers: string[];
-    changedUsers: string[];
-    allUsers: User[];
-    userState:  UserState; 
+    selectedTrainers: string[];
+    changedTrainers: string[];
+    allTrainers: TableTrainer[];
+    trainerState:  TrainerState; 
 }
 
-const EnhancedTableToolbar = inject('userState')(observer((props: EnhancedTableToolbarProps) => {
+const EnhancedTableToolbar = inject('trainerState')(observer((props: EnhancedTableToolbarProps) => {
     const classes = useToolbarStyles();
-    const { numSelected, numChanged, userState } = props;
+    const { numSelected, numChanged, trainerState } = props;
     const handleSaveClick = () => {
-        const { allUsers, changedUsers } = props;
-        const { updateUser } = userState;
-        changedUsers.forEach((u) => {
-            let user = allUsers.find((us) => us.login === u);
-            if(user!=undefined && userState!=undefined) {
-                        updateUser(user); 
+        const { allTrainers, changedTrainers } = props;
+        const { updateTrainer } = trainerState;
+        changedTrainers.forEach((t) => {
+            let trainer= allTrainers.find((tr) => tr.id === t);
+            if(trainer!=undefined && trainerState!=undefined) {
+                let name:string[] = trainer.name.split(' ');
+                let busy:boolean = trainer.busy=='true';
+                updateTrainer(new Trainer(trainer.id,name[0],name[1],name[2],busy,trainer.user)); 
             } 
         });
-        history.push('/users');
+        history.push('/trainers');
     };
 
     const handleDeleteClick = () => {
-        const { selectedUsers } = props;
-        const { deleteUser } = userState;
-        selectedUsers.forEach((u) => {
-                deleteUser(u); 
+        const { selectedTrainers } = props;
+        const { deleteTrainer } = trainerState;
+        selectedTrainers.forEach((t) => {
+                deleteTrainer(t); 
         });
-        history.push('/users');
+        history.push('/trainers');
     };
 
     return (
@@ -177,7 +205,7 @@ const EnhancedTableToolbar = inject('userState')(observer((props: EnhancedTableT
                 </Typography>
             ) : (
                 <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-                    Пользователи
+                    Тренеры
                 </Typography>
             )}
             {numChanged > 0 ? (
@@ -243,22 +271,27 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const UserTable = inject('userState')(
-    observer((userState: UserState) => {
+const UserTable = inject('trainerState')(
+    observer((trainerState: TrainerState) => {
         const classes = useStyles();
-        const [users, setUsers] = React.useState<User[]>([]);
+        const [trainers, setTrainers] = React.useState<TableTrainer[]>([]);
         const [order, setOrder] = React.useState<Order>('asc');
-        const [orderBy, setOrderBy] = React.useState<keyof User>('login');
+        const [orderBy, setOrderBy] = React.useState<keyof TableTrainer>('id');
         const [selected, setSelected] = React.useState<string[]>([]);
         const [changed, setChanged] = React.useState<string[]>([]);
         const [page, setPage] = React.useState(0);
         const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
         useEffect(() => {
-            setUsers(userState.users);
+            let newTrainers: TableTrainer[] = [];
+            trainerState.trainers.forEach((t) => {
+                let trainer: TableTrainer = new TableTrainer(t.id, t.surname + ' ' + t.firstname + ' ' + t.secondname, t.busy+'', t.user);
+                newTrainers = newTrainers.concat([],trainer)
+            });
+            setTrainers(newTrainers);
         });
 
-        const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof User) => {
+        const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof TableTrainer) => {
             console.log(event);
             const isAsc = orderBy === property && order === 'asc';
             setOrder(isAsc ? 'desc' : 'asc');
@@ -267,7 +300,7 @@ const UserTable = inject('userState')(
 
         const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
             if (event.target.checked) {
-                const newSelecteds = users.map((n: any) => n.login);
+                const newSelecteds = trainers.map((n: any) => n.id);
                 setSelected(newSelecteds);
                 return;
             } else {
@@ -302,41 +335,48 @@ const UserTable = inject('userState')(
             setPage(0);
         };
 
-        const handleCellChange = action((event: ChangeEvent<HTMLSelectElement>) => {
-            const login = event.target.id;
-            const changedIndex = changed.indexOf(login);
+        const handleCellChange = action((event: ChangeEvent<HTMLSelectElement>, field: string) => {
+            const id = event.target.id;
+            const changedIndex = changed.indexOf(id);
             let newChanged: string[] = [];
             if (changedIndex === -1) {
-                newChanged = newChanged.concat(changed, login);
+                newChanged = newChanged.concat(changed, id);
             }
             setChanged(newChanged);
 
-            let userChanged: User[] = [];
-            let user = users.find((u) => u.login === login);
-            users.filter(function (ele) {
-                return ele.login != login;
+            let trainerChanged: TableTrainer[] = [];
+            let trainer = trainers.find((t) => t.id === id);
+            trainers.filter(function (ele) {
+                return ele.id != id;
             });
-            if (user != undefined) {
-                user['role'] = event.target.value;
-                userChanged = userChanged.concat(user);
+            if (trainer != undefined) {
+                switch (field) {
+                    case 'name':
+                        trainer['name'] = event.target.value;
+                        break;
+                    case 'user':
+                        trainer['user'] = event.target.value;
+                        break;
+                }
+                trainerChanged = trainerChanged.concat(trainer);
             }
-            setUsers(users.concat(userChanged));
+            setTrainers(trainers.concat(trainerChanged));
         });
 
         const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
-        const emptyRows = rowsPerPage - Math.min(rowsPerPage, users.length - page * rowsPerPage);
+        const emptyRows = rowsPerPage - Math.min(rowsPerPage, trainers.length - page * rowsPerPage);
 
         return (
             <div className={classes.root}>
                 <Paper className={classes.paper}>
                     <EnhancedTableToolbar
                         numSelected={selected.length}
-                        selectedUsers={selected}
+                        selectedTrainers={selected}
                         numChanged={changed.length}
-                        allUsers={users}
-                        changedUsers={changed}
-                        userState={userState}
+                        allTrainers={trainers}
+                        changedTrainers={changed}
+                        trainerState={trainerState}
                     />
                     <TableContainer>
                         <Table
@@ -352,22 +392,22 @@ const UserTable = inject('userState')(
                                 orderBy={orderBy}
                                 onSelectAllClick={handleSelectAllClick}
                                 onRequestSort={handleRequestSort}
-                                rowCount={users.length}
+                                rowCount={trainers.length}
                             />
                             <TableBody>
-                                {stableSort(users, getComparator(order, orderBy))
+                                {stableSort(trainers, getComparator(order, orderBy))
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((row, index) => {
-                                        const isItemSelected = isSelected(row.login + '');
+                                        const isItemSelected = isSelected(row.id + '');
                                         const labelId = `enhanced-table-checkbox-${index}`;
                                         return (
                                             <TableRow
                                                 hover
-                                                onClick={(event) => handleClick(event, row.login + '')}
+                                                onClick={(event) => handleClick(event, row.id + '')}
                                                 role="checkbox"
                                                 aria-checked={isItemSelected}
                                                 tabIndex={-1}
-                                                key={row.login}
+                                                key={row.id}
                                                 selected={isItemSelected}
                                             >
                                                 <TableCell padding="checkbox">
@@ -384,25 +424,11 @@ const UserTable = inject('userState')(
                                                     padding="none"
                                                     align="right"
                                                 >
-                                                    {row.login}
+                                                    {row.id}
                                                 </TableCell>
-                                                <TableCell align="right">{row.password}</TableCell>
-                                                <TableCell align="right">{row.email}</TableCell>
-                                                <TableCell align="right">
-                                                    <NativeSelect
-                                                        defaultValue={row.role}
-                                                        id={row.login + ''}
-                                                        inputProps={{
-                                                            name: 'role',
-                                                        }}
-                                                        onChange={handleCellChange}
-                                                    >
-                                                        <option value={'ROLE_ADMINISTRATOR'}>Администратор</option>
-                                                        <option value={'ROLE_TRAINER'}>Тренер</option>
-                                                        <option value={'ROLE_STUDENT'}>Студент</option>
-                                                        <option value={'ROLE_DEFAULT'}>Обычный пользователь</option>
-                                                    </NativeSelect>
-                                                </TableCell>
+                                                <TableCell align="right" contentEditable='true'>{row.name}</TableCell>
+                                                <TableCell align="right">{row.user}</TableCell>
+                                                <TableCell align="right">{row.busy}</TableCell>
                                             </TableRow>
                                         );
                                     })}
@@ -420,7 +446,7 @@ const UserTable = inject('userState')(
                         labelRowsPerPage="Количество"
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
-                        count={users.length}
+                        count={trainers.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onChangePage={handleChangePage}
