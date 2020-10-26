@@ -15,7 +15,6 @@ import {
     TableContainer,
     TableBody,
     TablePagination,
-    NativeSelect,
     Button,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -25,7 +24,7 @@ import RedCheckbox from 'component/forms/controls/RedCheckbox';
 import history from 'global/history';
 import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import { useEffect } from 'react';
 import TrainerState from 'states/TrainerState';
 import { getComparator, Order, stableSort } from '../Sort/sort';
@@ -335,7 +334,7 @@ const UserTable = inject('trainerState')(
             setPage(0);
         };
 
-        const handleCellChange = action((event: ChangeEvent<HTMLSelectElement>, field: string) => {
+        const handleCellChange = action((event: any, field: string) => {
             const id = event.target.id;
             const changedIndex = changed.indexOf(id);
             let newChanged: string[] = [];
@@ -426,8 +425,8 @@ const UserTable = inject('trainerState')(
                                                 >
                                                     {row.id}
                                                 </TableCell>
-                                                <TableCell align="right" contentEditable='true'>{row.name}</TableCell>
-                                                <TableCell align="right">{row.user}</TableCell>
+                                                <TableCell align="right" contentEditable='true' onChange={(event) => handleCellChange(event, 'name')}>{row.name}</TableCell>
+                                                <TableCell align="right" contentEditable='true' onChange={(event) => handleCellChange(event, 'user')}>{row.user}</TableCell>
                                                 <TableCell align="right">{row.busy}</TableCell>
                                             </TableRow>
                                         );

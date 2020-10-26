@@ -23,7 +23,7 @@ class AdminNav extends React.PureComponent<AdminNavProps> {
                     <div>
                         <nav>
                         <div className={'nav-item'}>
-                                <a className={'menu-item nav-inner-item'} href='/trainers'>
+                                <a className={'menu-item nav-inner-item'} onClick={()=> history.push('/trainers')}>
                                     <i className={'ico ico--bar'}>
                                         <FontAwesomeIcon icon={faAddressCard}/>    
                                     </i>
@@ -31,7 +31,7 @@ class AdminNav extends React.PureComponent<AdminNavProps> {
                                 </a>
                             </div>
                             <div className={'nav-item'}>
-                                <a className={'menu-item nav-inner-item'} href='/courses'>
+                                <a className={'menu-item nav-inner-item'} onClick={()=> history.push('/courses')}>
                                     <i className={'ico ico--bar'}>
                                         <FontAwesomeIcon icon={faGraduationCap}/>    
                                     </i>
@@ -47,7 +47,7 @@ class AdminNav extends React.PureComponent<AdminNavProps> {
                                 </a>
                             </div>
                             <div className={'nav-item'}>
-                                <a className={'menu-item nav-inner-item'} href='/students'>
+                                <a className={'menu-item nav-inner-item'} onClick={()=> history.push('/students')}>
                                     <i className={'ico ico--bar'}>
                                         <FontAwesomeIcon icon={faChalkboardTeacher}/>    
                                     </i>

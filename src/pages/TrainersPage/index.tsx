@@ -2,8 +2,8 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import './style.sass';
 import { observable, runInAction, action } from 'mobx';
-import { Header, Menu, UserTable } from 'component';
-import UserState from 'states/UserState';
+import { Header, Menu, TrainerTable } from 'component';
+import TrainerState from 'states/TrainerState';
 
 interface TrainersPageProps {
     authState?: any;
@@ -31,7 +31,7 @@ class TrainersPage extends React.PureComponent<TrainersPageProps> {
     };
 
     render() {
-        let trainerState: UserState = this.props.trainerState;
+        let trainerState: TrainerState = this.props.trainerState;
         const { trainers, updateTrainer, deleteTrainer } = this.props.trainerState;
         return (
             <div className={'pageContainer--main'} onScroll={this.handleScroll}>
@@ -41,7 +41,7 @@ class TrainersPage extends React.PureComponent<TrainersPageProps> {
                     <div className={'main-container'}>
                         <div className={'main-content'}>
                             <div className="user-table">
-                                <UserTable {...trainerState} trainers={trainers} updateTrainer={updateTrainer} deleteTrainer={deleteTrainer}/>
+                                <TrainerTable {...trainerState} trainers={trainers} updateTrainer={updateTrainer} deleteTrainer={deleteTrainer}/>
                             </div>
                         </div>
                     </div>
