@@ -66,7 +66,12 @@ public class AdminEditController {
     }
     @PutMapping(value = {"/user"}, consumes = "application/json", produces = "application/json")
     public ResponseEntity<User> editUser(@RequestBody User user) {
-        userService.update(user);
+        Optional<User> userOptional = userService.getUserByLogin(user.getLogin());
+        if(userOptional.isPresent()) {
+            user.setImage(userOptional.get().getImage());
+            user.setRequestList(userOptional.get().getRequestList());
+        }
+        userService.updateExceptPassword(user);
         return ResponseEntity.ok(user);
     }
 

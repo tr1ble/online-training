@@ -22,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class User {
 
-    @Basic
+    @Basic(optional = false)
     @Id
     @Column(name="login", nullable = false, length = 45, unique = true)
     @NonNull
