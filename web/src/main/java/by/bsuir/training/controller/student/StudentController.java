@@ -1,6 +1,8 @@
 package by.bsuir.training.controller.student;
 
+import by.bsuir.training.entites.CompletedTask;
 import by.bsuir.training.entites.Student;
+import by.bsuir.training.service.completedtask.CompletedTaskService;
 import by.bsuir.training.service.databasefile.DatabaseFileService;
 import by.bsuir.training.service.student.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +17,16 @@ import java.util.Map;
 
 @RestController
 public class StudentController {
-
-    private static final String STUDENT_ID = "student_id";
     private final StudentService studentService;
+    private final CompletedTaskService completedTaskService;
     private final DatabaseFileService databaseFileService;
 
+    private static final String STUDENT_ID = "student_id";
+    private static final String COMPLETED_TASK_ID = "completedTaskId";
+
     @Autowired
-    public StudentController(StudentService studentService, DatabaseFileService databaseFileService) {
+    public StudentController(StudentService studentService, CompletedTaskService completedTaskService, DatabaseFileService databaseFileService) {
+        this.completedTaskService = completedTaskService;
         this.databaseFileService = databaseFileService;
         this.studentService = studentService;
     }
@@ -51,6 +56,25 @@ public class StudentController {
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
         }
+    }
+
+    @PostMapping(value = {"/completedtask"}, consumes = "application/json")
+    @Secured("ROLE_STUDENT")
+    public CompletedTask addCompletedTask(@RequestBody(required = false) CompletedTask completedTask) {
+        return completedTaskService.add(completedTask);
+    }
+
+    @PutMapping(value = {"/completedTask"}, consumes = "application/json", produces = "application/json")
+    @Secured("ROLE_STUDENT")
+    public ResponseEntity<CompletedTask> editCompletedTask(@RequestBody CompletedTask completedTask) {
+        completedTaskService.update(completedTask);
+        return ResponseEntity.ok(completedTask);
+    }
+
+    @DeleteMapping(value = {"/completedTask/{completedTaskId}"})
+    public ResponseEntity<Integer> deleteCompletedTask(@PathVariable(COMPLETED_TASK_ID) int completedTaskId) {
+        completedTaskService.remove(completedTaskId);
+        return ResponseEntity.ok(completedTaskId);
     }
 
 

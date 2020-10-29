@@ -40,6 +40,7 @@ public class AdminEditController {
     }
 
     @PutMapping(value = {"/course"}, consumes = "application/json", produces = "application/json")
+    @Secured({"ROLE_ADMINISTRATOR"})
     public ResponseEntity<Course> editCourse(@RequestBody Course course) {
         int trainerId = course.getTrainer().getId();
         Optional<Trainer> trainerOptional = trainerService.getById(trainerId);
@@ -52,19 +53,16 @@ public class AdminEditController {
     }
 
 
-    @PutMapping(value = {"/task"}, consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Task> editTask(@RequestBody Task task) {
-       taskService.update(task);
-       return ResponseEntity.ok(task);
-    }
 
     @PutMapping(value = {"/trainer"}, consumes = "application/json", produces = "application/json")
+    @Secured({"ROLE_ADMINISTRATOR"})
     public ResponseEntity<Trainer> editTrainer(@RequestBody Trainer trainer) {
         trainerService.update(trainer);
         return ResponseEntity.ok(trainer);
 
     }
     @PutMapping(value = {"/user"}, consumes = "application/json", produces = "application/json")
+    @Secured({"ROLE_ADMINISTRATOR"})
     public ResponseEntity<User> editUser(@RequestBody User user) {
         Optional<User> userOptional = userService.getUserByLogin(user.getLogin());
         if(userOptional.isPresent()) {
@@ -76,17 +74,13 @@ public class AdminEditController {
     }
 
     @PutMapping(value = {"/student"}, consumes = "application/json", produces = "application/json")
+    @Secured({"ROLE_ADMINISTRATOR"})
     public ResponseEntity<Student> editStudent(@RequestBody Student student) {
         studentService.update(student);
         return ResponseEntity.ok(student);
 
     }
-    
-    @PutMapping(value = {"/completedTask"}, consumes = "application/json", produces = "application/json")
-    public ResponseEntity<CompletedTask> editCompletedTask(@RequestBody CompletedTask completedTask) {
-        completedTaskService.update(completedTask);
-        return ResponseEntity.ok(completedTask);
-    }
+
 
     @PutMapping(value = {"/request"}, consumes = "application/json")
     @Secured({"ROLE_ADMINISTRATOR"})

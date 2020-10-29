@@ -37,13 +37,18 @@ public class AdminGetController {
     @GetMapping(value = "/user/{username}", produces = "application/json")
     @Secured({"ROLE_ADMINISTRATOR", "ROLE_STUDENT", "ROLE_TRAINER", "ROLE_DEFAULT"})
     public ResponseEntity<User> getUserByLogin(@PathVariable String username, Authentication authentication) {
-        Optional<User> userOptional = userService.getUserByLogin(username);
-        return userOptional.map((user) -> new ResponseEntity<>(user, HttpStatus.OK)
-        ).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        ResponseEntity<User> responseNotFound = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(authentication.getName().equals(username)) {
+            Optional<User> userOptional = userService.getUserByLogin(username);
+            return userOptional.map((user) -> new ResponseEntity<>(user, HttpStatus.OK)
+            ).orElse(responseNotFound);
+        }
+        return responseNotFound;
     }
 
 
     @GetMapping(value = "/users/findByRole/{role}", produces = "application/json")
+    @Secured({"ROLE_ADMINISTRATOR"})
     public ResponseEntity<List<User>> getUsersByRole(@PathVariable String role) {
         return ResponseEntity.ok(userService.findByRole(role));
     }

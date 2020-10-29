@@ -10,6 +10,7 @@ import by.bsuir.training.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +40,7 @@ public class AdminAddController {
 
 
     @PostMapping(value = {"/course"}, consumes = "application/json")
+    @Secured("ROLE_ADMINISTRATOR")
     public Course addCourse(@RequestBody(required = false) Course course) {
         int trainerId = course.getTrainer().getId();
         Optional<Trainer> trainerOptional = trainerService.getById(trainerId);
@@ -49,15 +51,9 @@ public class AdminAddController {
         return courseService.add(course);
     }
 
-    @PostMapping(value = {"/task"}, consumes = "application/json")
-    public Task addTask(@RequestBody(required = false) @Valid Task task, Errors errors) {
-        if(errors.hasErrors()) {
-            return null;
-        }
-        return taskService.add(task);
-    }
 
     @PostMapping(value = {"/trainer"}, consumes = "application/json")
+    @Secured("ROLE_ADMINISTRATOR")
     public ResponseEntity<Trainer> addTrainer(@RequestBody(required = false) Trainer trainer) {
         Optional<User> userOptional = userService.getUserByLogin(trainer.getUser().getLogin());
         if(userOptional.isPresent()) {
@@ -70,6 +66,7 @@ public class AdminAddController {
 
 
     @PostMapping(value = {"/user"}, consumes = "application/json")
+    @Secured("ROLE_ADMINISTRATOR")
     public ResponseEntity<String> addUser(@RequestBody(required = false) User user) {
         Optional<User> userOptional = userService.getUserByLogin(user.getLogin());
         if(!userOptional.isPresent()) {
@@ -81,13 +78,8 @@ public class AdminAddController {
 
     }
 
-    @PostMapping(value = {"/completedtask"}, consumes = "application/json")
-    public CompletedTask addCompletedTask(@RequestBody(required = false) CompletedTask completedTask) {
-        return completedTaskService.add(completedTask);
-
-    }
-
     @PostMapping(value = {"/student"}, consumes = "application/json")
+    @Secured("ROLE_ADMINISTRATOR")
     public Student addStudent(@RequestBody(required = false) Student student) {
         return studentService.add(student);
 
