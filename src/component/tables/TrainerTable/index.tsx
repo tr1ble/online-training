@@ -216,6 +216,7 @@ const EnhancedTableToolbar = inject('trainerState')(observer((props: EnhancedTab
             ) : (
                 <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
                     Тренеры
+                    <span>                  </span>
                     <FontAwesomeIcon icon={faPlus}/>    
                 </Typography>
 
@@ -294,16 +295,15 @@ const UserTable = inject('trainerState')(
         const [page, setPage] = React.useState(0);
         const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-        let newTrainers: TableTrainer[] = [];
-        trainerState.trainers.forEach((t) => {
-            let trainer: TableTrainer = new TableTrainer(t.id, t.surname + ' ' + t.firstname + ' ' + t.secondname, t.busy+'', t.user.login);
-            newTrainers = newTrainers.concat([],trainer)
-        });
-
-
         useEffect(() => {
+            const newTrainers: TableTrainer[] = [];
+            trainerState.trainers.forEach((t) => {
+                const trainer: TableTrainer = new TableTrainer(t.id, t.surname + ' ' + t.firstname + ' ' + t.secondname, t.busy+'', t.user.login);
+                trainers.push(trainer)
+            });
             setTrainers(newTrainers);
-        });
+        },
+        []);
 
         const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof TableTrainer) => {
             console.log(event);
@@ -442,7 +442,7 @@ const UserTable = inject('trainerState')(
                                                 </TableCell>
                                                 <TableCell align="right" onChange={(event) => handleCellChange(event, 'name')}>{row.name}</TableCell>
                                                 <TableCell align="right" onChange={(event) => handleCellChange(event, 'user')}>{row.user}</TableCell>
-                                                <TableCell align="right">{row.busy}</TableCell>
+                                                <TableCell align="right">{row.busy=='false' ? 'Нет' : ''}</TableCell>
                                             </TableRow>
                                         );
                                     })}
