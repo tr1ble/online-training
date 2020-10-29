@@ -134,7 +134,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
     numSelected: number;
-    numChanged: number;
     selectedUsers: string[];
     changedUsers: string[];
     allUsers: User[];
@@ -143,7 +142,7 @@ interface EnhancedTableToolbarProps {
 
 const EnhancedTableToolbar = inject('userState')(observer((props: EnhancedTableToolbarProps) => {
     const classes = useToolbarStyles();
-    const { numSelected, numChanged, userState } = props;
+    const { numSelected, userState, changedUsers } = props;
     const handleSaveClick = () => {
         const { allUsers, changedUsers } = props;
         const { updateUser } = userState;
@@ -180,7 +179,7 @@ const EnhancedTableToolbar = inject('userState')(observer((props: EnhancedTableT
                     Пользователи
                 </Typography>
             )}
-            {numChanged > 0 ? (
+            {changedUsers.length > 0 ? (
                 <Typography className={'save-button'} id="tableSaveButton" component="div">
                     <Button color="primary" onClick={handleSaveClick}>
                         Сохранить
@@ -333,7 +332,6 @@ const UserTable = inject('userState')(
                     <EnhancedTableToolbar
                         numSelected={selected.length}
                         selectedUsers={selected}
-                        numChanged={changed.length}
                         allUsers={users}
                         changedUsers={changed}
                         userState={userState}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import './style.sass';
-import { observable, runInAction, action } from 'mobx';
+import { observable, action } from 'mobx';
 import { Header, Menu, UserTable } from 'component';
 import UserState from 'states/UserState';
 
@@ -50,17 +50,6 @@ class UsersPage extends React.PureComponent<UsersPageProps> {
         );
     }
 
-    @action showLogin = () => {
-        runInAction(() => {
-            this.isLoginVisible = true;
-        });
-    };
-
-    @action hideLogin = () => {
-        runInAction(() => {
-            this.isLoginVisible = false;
-        });
-    };
 }
 
 export default UsersPage;

@@ -1,5 +1,5 @@
-export { default as UserTable } from "./tables/UserTable/UserTable"
-export { default as TrainerTable } from "./tables/TrainerTable/TrainerTable"
+export { default as UserTable } from "./tables/UserTable"
+export { default as TrainerTable } from "./tables/TrainerTable"
 
 export { default as LoginForm } from "./forms/LoginForm"
 export { default as RegisterForm } from "./forms/RegisterForm"

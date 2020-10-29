@@ -1,12 +1,18 @@
 import getInstance from "./instance";
 
+class User {
+    login: string;
+    constructor(login: string) {
+        this.login = login;
+    }
+}
 interface Trainer {
     id: string | number;
     firstname: string;
     secondname: string;
     surname: string;
     busy: boolean;
-    user: string;
+    user: User;
 }
 
 

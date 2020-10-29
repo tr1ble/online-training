@@ -16,6 +16,8 @@ interface ProfileWindowProps {
   }
 
 @inject('authState')
+@inject('userState')
+@inject('trainerState')
 @observer
 class ProfileWindow extends React.PureComponent<ProfileWindowProps> {
     @observable isAvatarUploadVisible:boolean = false;

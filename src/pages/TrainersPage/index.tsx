@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import './style.sass';
-import { observable, runInAction, action } from 'mobx';
+import { observable, action } from 'mobx';
 import { Header, Menu, TrainerTable } from 'component';
 import TrainerState from 'states/TrainerState';
 
@@ -40,7 +40,7 @@ class TrainersPage extends React.PureComponent<TrainersPageProps> {
                     <Header />
                     <div className={'main-container'}>
                         <div className={'main-content'}>
-                            <div className="user-table">
+                            <div className="trainer-table">
                                 <TrainerTable {...trainerState} trainers={trainers} updateTrainer={updateTrainer} deleteTrainer={deleteTrainer}/>
                             </div>
                         </div>
@@ -49,18 +49,6 @@ class TrainersPage extends React.PureComponent<TrainersPageProps> {
             </div>
         );
     }
-
-    @action showLogin = () => {
-        runInAction(() => {
-            this.isLoginVisible = true;
-        });
-    };
-
-    @action hideLogin = () => {
-        runInAction(() => {
-            this.isLoginVisible = false;
-        });
-    };
 }
 
 export default TrainersPage;

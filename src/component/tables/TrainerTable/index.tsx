@@ -28,6 +28,8 @@ import React from 'react';
 import { useEffect } from 'react';
 import TrainerState from 'states/TrainerState';
 import { getComparator, Order, stableSort } from '../Sort/sort';
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class TableTrainer {
     id: string | number;
@@ -43,15 +45,23 @@ class TableTrainer {
     }
 }
 
+class User {
+    login: string;
+    constructor(login: string) {
+        this.login = login;
+    }
+}
+
+
 class Trainer {
     id: string | number;
     firstname: string;
     secondname: string;
     surname: string;
     busy: boolean;
-    user: string;
+    user: User;
 
-    constructor(id: string | number,surname: string, firstname: string, secondname: string,busy: boolean,user: string) {
+    constructor(id: string | number,surname: string, firstname: string, secondname: string,busy: boolean,user: User) {
         this.id = id;
         this.firstname = firstname;
         this.secondname = secondname;
@@ -177,7 +187,8 @@ const EnhancedTableToolbar = inject('trainerState')(observer((props: EnhancedTab
             if(trainer!=undefined && trainerState!=undefined) {
                 let name:string[] = trainer.name.split(' ');
                 let busy:boolean = trainer.busy=='true';
-                updateTrainer(new Trainer(trainer.id,name[0],name[1],name[2],busy,trainer.user)); 
+                let user:User = new User(trainer.user);
+                updateTrainer(new Trainer(trainer.id,name[0],name[1],name[2],busy,user)); 
             } 
         });
         history.push('/trainers');
@@ -205,7 +216,9 @@ const EnhancedTableToolbar = inject('trainerState')(observer((props: EnhancedTab
             ) : (
                 <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
                     Тренеры
+                    <FontAwesomeIcon icon={faPlus}/>    
                 </Typography>
+
             )}
             {numChanged > 0 ? (
                 <Typography className={'save-button'} id="tableSaveButton" component="div">
@@ -281,12 +294,14 @@ const UserTable = inject('trainerState')(
         const [page, setPage] = React.useState(0);
         const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+        let newTrainers: TableTrainer[] = [];
+        trainerState.trainers.forEach((t) => {
+            let trainer: TableTrainer = new TableTrainer(t.id, t.surname + ' ' + t.firstname + ' ' + t.secondname, t.busy+'', t.user.login);
+            newTrainers = newTrainers.concat([],trainer)
+        });
+
+
         useEffect(() => {
-            let newTrainers: TableTrainer[] = [];
-            trainerState.trainers.forEach((t) => {
-                let trainer: TableTrainer = new TableTrainer(t.id, t.surname + ' ' + t.firstname + ' ' + t.secondname, t.busy+'', t.user);
-                newTrainers = newTrainers.concat([],trainer)
-            });
             setTrainers(newTrainers);
         });
 
@@ -425,8 +440,8 @@ const UserTable = inject('trainerState')(
                                                 >
                                                     {row.id}
                                                 </TableCell>
-                                                <TableCell align="right" contentEditable='true' onChange={(event) => handleCellChange(event, 'name')}>{row.name}</TableCell>
-                                                <TableCell align="right" contentEditable='true' onChange={(event) => handleCellChange(event, 'user')}>{row.user}</TableCell>
+                                                <TableCell align="right" onChange={(event) => handleCellChange(event, 'name')}>{row.name}</TableCell>
+                                                <TableCell align="right" onChange={(event) => handleCellChange(event, 'user')}>{row.user}</TableCell>
                                                 <TableCell align="right">{row.busy}</TableCell>
                                             </TableRow>
                                         );
