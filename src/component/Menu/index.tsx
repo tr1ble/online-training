@@ -1,8 +1,11 @@
 import { inject, observer } from "mobx-react";
 import React from 'react';
-import AdminNav from "./AdminNav";
 
 import "./style.sass";
+import TrainerNav from "./TrainerNav";
+import AdminNav from "./AdminNav";
+import StudentNav from "./StudentNav";
+import DefaultNav from "./DefaultNav";
 
 interface MenuProps {
     authState?: any;
@@ -28,6 +31,15 @@ class Menu extends React.PureComponent<MenuProps> {
                     </div>
                     {(role=='ROLE_ADMINISTRATOR') && (
                         <AdminNav/>
+                    )}
+                    {(role=='ROLE_TRAINER') && (
+                        <TrainerNav/>
+                    )}
+                    {(role=='ROLE_DEFAULT') && (
+                        <DefaultNav/>
+                    )}
+                    {(role=='ROLE_STUDENT') && (
+                        <StudentNav/>
                     )}
                 </div>
             </aside>

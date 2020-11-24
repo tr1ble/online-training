@@ -14,9 +14,21 @@ export async function getAllUsers() {
     return response.data;
 }
 
+export async function getUsersByRole(role:string) {
+    const instance = await getInstance();
+    const response = await instance.get('/users/findByRole/'+role, {});
+    return response.data;
+}
+
 export async function updateUser(user:User) {
     const instance = await getInstance();
     const response = await instance.put('/user', user);
+    return response.data;
+}
+
+export async function addUser(user:User) {
+    const instance = await getInstance();
+    const response = await instance.post('/user', user);
     return response.data;
 }
 

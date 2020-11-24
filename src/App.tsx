@@ -17,8 +17,20 @@ interface AppProps {
 class App extends React.PureComponent<AppProps> {
 
   getRoutes() {
-    const { authorized, remember } = this.props.authState;
-    const actualRoutes = authorized==true && remember==true ? routes.mainRoutes : routes.authRoutes;
+    const { authorized, remember, role } = this.props.authState;
+    let actualRoutes = routes.authRoutes;
+    if(authorized==true && remember==true) {
+      switch(role) {
+        case('ROLE_ADMINISTRATOR'):
+          actualRoutes = routes.adminRoutes;
+          break;
+        case('ROLE_TRAINER'):
+          actualRoutes = routes.trainerRoutes;
+          break;
+        case('ROLE_DEFAULT'):
+          actualRoutes = routes.defaultRoutes;
+      }
+    }
 
     return actualRoutes.map(r => (
       <Route

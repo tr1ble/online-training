@@ -1,4 +1,5 @@
-import { deleteTrainer, getAllTrainers, updateTrainer } from "api/trainers";
+import { getCoursesByTrainer } from "api/courses";
+import { deleteTrainer, getAllTrainers, updateTrainer, addTrainer, getTrainersByBusy } from "api/trainers";
 import { action, configure, observable, runInAction } from "mobx";
 
 configure({enforceActions: 'observed'})
@@ -11,7 +12,7 @@ class User {
 }
 
 interface Trainer {
-    id: string | number;
+    id: string | number | undefined;
     firstname: string;
     secondname: string;
     surname: string;
@@ -35,6 +36,10 @@ class TrainerState {
         updateTrainer(trainer);
     }
 
+    @action addTrainer = async (trainer:Trainer) => {
+        addTrainer(trainer);
+    }
+
     @action deleteTrainer = async (trainer:string) => {
         this.trainers.filter(function (ele) {
             return ele.id != trainer;
@@ -51,6 +56,16 @@ class TrainerState {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    getTrainersByBusy = async (busy:string) => {
+        const response = await getTrainersByBusy(busy);
+        return response
+    }
+
+    getCoursesByTrainer = async (trainer:string) => {
+        const response = await getCoursesByTrainer(trainer);
+        return response;
     }
 }
 

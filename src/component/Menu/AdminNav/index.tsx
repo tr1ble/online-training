@@ -57,6 +57,21 @@ class AdminNav extends React.PureComponent<AdminNavProps> {
                         </nav>
                     </div>
                 </div>
+                <h4 className={'menu-title'}>ОБРАБОТКА ДАННЫХ</h4>
+                <div className={'nav-container'}>
+                    <div>
+                        <nav>
+                        <div className={'nav-item'}>
+                                <a className={'menu-item nav-inner-item'} onClick={()=> history.push('/requests')}>
+                                    <i className={'ico ico--bar'}>
+                                        <FontAwesomeIcon icon={faAddressCard}/>    
+                                    </i>
+                                    ЗАПРОСЫ
+                                </a>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
             </nav>
         );
     };

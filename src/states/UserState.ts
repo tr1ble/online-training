@@ -1,4 +1,4 @@
-import { deleteUser, getAllUsers, updateUser } from "api/users";
+import { deleteUser, getAllUsers, updateUser,getUsersByRole } from "api/users";
 import { action, configure, observable, runInAction } from "mobx";
 
 configure({enforceActions: 'observed'})
@@ -42,6 +42,11 @@ class UserState {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    getUsersByRole = async (role:string) => {
+        const response = await getUsersByRole(role);
+        return response
     }
 }
 

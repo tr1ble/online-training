@@ -1,0 +1,39 @@
+import { inject, observer } from "mobx-react";
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGraduationCap } from '@fortawesome/free-solid-svg-icons'
+import "./style.sass";
+import history from "global/history";
+
+interface TrainerNavProps {
+    authState?: any;
+}
+
+@inject('authState')
+@observer
+class TrainerNav extends React.PureComponent<TrainerNavProps> {
+    render() {
+        return (
+            <nav>
+                <h4 className={'menu-title'}>ПРОСМОТР</h4>
+                <div className={'nav-container'}>
+                    <div>
+                        <nav>
+                            <div className={'nav-item'}>
+                                <a className={'menu-item nav-inner-item'} onClick={()=> history.push('/courses')}>
+                                    <i className={'ico ico--bar'}>
+                                        <FontAwesomeIcon icon={faGraduationCap}/>    
+                                    </i>
+                                    КУРСЫ
+                                </a>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </nav>
+        );
+    };
+};
+
+export default TrainerNav;
+

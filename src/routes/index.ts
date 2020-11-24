@@ -1,7 +1,11 @@
 import authRoutes from "./authRoutes";
-import mainRoutes from "./mainRoutes";
+import adminRoutes from "./adminRoutes";
+import trainerRoutes from "./trainerRoutes";
+import defaultRoutes from "./defaultRoutes";
 
 export default {
     authRoutes: authRoutes,
-    mainRoutes: mainRoutes,
+    adminRoutes: adminRoutes,
+    trainerRoutes: trainerRoutes,
+    defaultRoutes: defaultRoutes,
 };

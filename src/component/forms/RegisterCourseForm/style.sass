@@ -1,0 +1,39 @@
+.registration-form 
+    display: flex
+    justify-content: center
+
+
+.reg-button
+    font-size: 22px
+    color: #2c2e31
+    -webkit-flex: 1 0 0
+    -ms-flex: 1 0 0
+    flex: 1 0 0
+    position: relative
+    display: inline-block
+    padding: .1em 1.2em 0
+    border: 1px solid #f6e770
+    background-color: #f6e770
+    border-radius: .3em
+    line-height: 2.2em
+    vertical-align: middle
+    text-align: center
+    opacity: .7
+    transition: opacity .25s,color 275ms
+    transition-timing-function: cubic-bezier(.4,.25,.3,1)
+    -webkit-backface-visibility: hidden
+    backface-visibility: hidden
+
+    @media only screen and (min-width: 40.063em)
+        -webkit-flex: 0 1 auto
+        -ms-flex: 0 1 auto
+        flex: 0 1 auto
+
+    &:hover
+        opacity: 1
+        cursor: pointer
+
+.error-message-register
+  margin-top: -9px
+  color: #ff0000
+  font-size: 16px

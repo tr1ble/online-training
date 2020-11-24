@@ -32,7 +32,7 @@ class TrainersPage extends React.PureComponent<TrainersPageProps> {
 
     render() {
         let trainerState: TrainerState = this.props.trainerState;
-        const { trainers, updateTrainer, deleteTrainer } = this.props.trainerState;
+        const { trainers, updateTrainer, deleteTrainer, getCoursesByTrainer} = this.props.trainerState;
         return (
             <div className={'pageContainer--main'} onScroll={this.handleScroll}>
                 <Menu />
@@ -41,7 +41,7 @@ class TrainersPage extends React.PureComponent<TrainersPageProps> {
                     <div className={'main-container'}>
                         <div className={'main-content'}>
                             <div className="trainer-table">
-                                <TrainerTable {...trainerState} trainers={trainers} updateTrainer={updateTrainer} deleteTrainer={deleteTrainer}/>
+                                <TrainerTable {...trainerState} trainers={trainers} updateTrainer={updateTrainer} deleteTrainer={deleteTrainer} getCoursesByTrainer={getCoursesByTrainer}/>
                             </div>
                         </div>
                     </div>

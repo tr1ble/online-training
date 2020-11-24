@@ -30,6 +30,8 @@ import TrainerState from 'states/TrainerState';
 import { getComparator, Order, stableSort } from '../Sort/sort';
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import "./style.sass";
+import { AddTrainerForm } from 'component';
 
 class TableTrainer {
     id: string | number;
@@ -69,6 +71,15 @@ class Trainer {
         this.busy=busy;
         this.user = user;
     }
+}
+
+interface Course {
+    id: string | number | undefined;
+    title: string;
+    startDate: Date;
+    endDate: Date;
+    trainer: Trainer;
+    image: File;
 }
 
 
@@ -174,11 +185,13 @@ interface EnhancedTableToolbarProps {
     changedTrainers: string[];
     allTrainers: TableTrainer[];
     trainerState:  TrainerState; 
+    role: string;
 }
 
 const EnhancedTableToolbar = inject('trainerState')(observer((props: EnhancedTableToolbarProps) => {
     const classes = useToolbarStyles();
-    const { numSelected, numChanged, trainerState } = props;
+    const { numSelected, numChanged, trainerState, role } = props;
+    const [clicked, setClicked] = React.useState(false);
     const handleSaveClick = () => {
         const { allTrainers, changedTrainers } = props;
         const { updateTrainer } = trainerState;
@@ -186,7 +199,7 @@ const EnhancedTableToolbar = inject('trainerState')(observer((props: EnhancedTab
             let trainer= allTrainers.find((tr) => tr.id === t);
             if(trainer!=undefined && trainerState!=undefined) {
                 let name:string[] = trainer.name.split(' ');
-                let busy:boolean = trainer.busy=='true';
+                let busy:boolean = trainer.busy!='false';
                 let user:User = new User(trainer.user);
                 updateTrainer(new Trainer(trainer.id,name[0],name[1],name[2],busy,user)); 
             } 
@@ -203,49 +216,69 @@ const EnhancedTableToolbar = inject('trainerState')(observer((props: EnhancedTab
         history.push('/trainers');
     };
 
-    return (
-        <Toolbar
-            className={clsx(classes.root, {
-                [classes.highlight]: numSelected > 0,
-            })}
-        >
-            {numSelected > 0 ? (
-                <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-                    {numSelected} выбрано
-                </Typography>
-            ) : (
-                <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-                    Тренеры
-                    <span>                  </span>
-                    <FontAwesomeIcon icon={faPlus}/>    
-                </Typography>
+    const handleAddClick = () => {
+        if(clicked) {
+            setClicked(false);
+        } else {
+            setClicked(true);
+        }
+    };
 
-            )}
-            {numChanged > 0 ? (
-                <Typography className={'save-button'} id="tableSaveButton" component="div">
-                    <Button color="primary" onClick={handleSaveClick}>
-                        Сохранить
-                    </Button>
-                </Typography>
-            ) : (
-                <Typography className={'save-button__unactive'} component="div">
-                    <Button color="primary">Сохранить</Button>
-                </Typography>
-            )}
-            {numSelected > 0 ? (
-                <Tooltip title="Удалить">
-                    <IconButton aria-label="delete" onClick={handleDeleteClick}>
-                        <DeleteIcon/>
-                    </IconButton>
-                </Tooltip>
-            ) : (
-                <Tooltip title="Фильтрация">
-                    <IconButton aria-label="filter list">
-                        <FilterListIcon />
-                    </IconButton>
-                </Tooltip>
-            )}
-        </Toolbar>
+    return (
+        <div>
+            <Toolbar
+                className={clsx(classes.root, {
+                    [classes.highlight]: numSelected > 0,
+                })}
+            >
+                {numSelected > 0 ? (
+                    <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
+                        {numSelected} выбрано
+                    </Typography>
+                ) : (
+                    <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+                        Тренеры
+                        <span>                  </span>
+                        <i className={'ico ico--action'} onClick={handleAddClick}>
+                            {role=='ROLE_ADMINISTRATOR' && (<FontAwesomeIcon icon={faPlus}/>)}
+                        </i> 
+                    </Typography>
+
+                )}
+                {numChanged > 0 ? (
+                    <Typography className={'save-button'} id="tableSaveButton" component="div">
+                        <Button color="primary" onClick={handleSaveClick}>
+                            Сохранить
+                        </Button>
+                    </Typography>
+                ) : (
+                    <Typography className={'save-button__unactive'} component="div">
+                        <Button color="primary">Сохранить</Button>
+                    </Typography>
+                )}
+                {numSelected > 0 ? (
+                    <Tooltip title="Удалить">
+                        <IconButton aria-label="delete" onClick={handleDeleteClick}>
+                            <DeleteIcon/>
+                        </IconButton>
+                    </Tooltip>
+                ) : (
+                    <Tooltip title="Фильтрация">
+                        <IconButton aria-label="filter list">
+                            <FilterListIcon />
+                        </IconButton>
+                    </Tooltip>
+                )}
+            </Toolbar>
+            {clicked && (
+            <div id="open-modal" className="modal-window">
+                <div>
+                    <a title="Закрыть" className="modal-close" onClick={handleAddClick}>✖</a>
+                    <AddTrainerForm/>
+                </div>
+            </div>)}
+
+        </div>
     );
 }));
 
@@ -284,7 +317,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const UserTable = inject('trainerState')(
+const TrainerTable = inject('trainerState')(
     observer((trainerState: TrainerState) => {
         const classes = useStyles();
         const [trainers, setTrainers] = React.useState<TableTrainer[]>([]);
@@ -298,12 +331,26 @@ const UserTable = inject('trainerState')(
         useEffect(() => {
             const newTrainers: TableTrainer[] = [];
             trainerState.trainers.forEach((t) => {
-                const trainer: TableTrainer = new TableTrainer(t.id, t.surname + ' ' + t.firstname + ' ' + t.secondname, t.busy+'', t.user.login);
-                trainers.push(trainer)
+                let busy = '+';
+                if(t.busy==true) {
+                    async () => {
+                        let courses: Course[] = [];
+                        const { getCoursesByTrainer } = trainerState;
+                        courses = await getCoursesByTrainer(t.id+'');
+                        busy='';
+                        courses.forEach((c)=> {
+                            busy = busy + c.title + '\n';
+                        });
+                    };
+                } else {
+                    busy = 'false'; 
+                }
+                const trainer: TableTrainer = new TableTrainer(t.id+'', t.surname + ' ' + t.firstname + ' ' + t.secondname, busy, t.user.login);
+                newTrainers.push(trainer);
             });
             setTrainers(newTrainers);
         },
-        []);
+        [trainerState.trainers]);
 
         const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof TableTrainer) => {
             console.log(event);
@@ -381,6 +428,8 @@ const UserTable = inject('trainerState')(
 
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, trainers.length - page * rowsPerPage);
 
+        const role = localStorage.getItem('role') + '';
+
         return (
             <div className={classes.root}>
                 <Paper className={classes.paper}>
@@ -391,6 +440,7 @@ const UserTable = inject('trainerState')(
                         allTrainers={trainers}
                         changedTrainers={changed}
                         trainerState={trainerState}
+                        role={role}
                     />
                     <TableContainer>
                         <Table
@@ -440,9 +490,11 @@ const UserTable = inject('trainerState')(
                                                 >
                                                     {row.id}
                                                 </TableCell>
-                                                <TableCell align="right" onChange={(event) => handleCellChange(event, 'name')}>{row.name}</TableCell>
+                                                <TableCell align="right" contentEditable={true} onChange={(event) => handleCellChange(event, 'name')}>{row.name}</TableCell>
                                                 <TableCell align="right" onChange={(event) => handleCellChange(event, 'user')}>{row.user}</TableCell>
-                                                <TableCell align="right">{row.busy=='false' ? 'Нет' : ''}</TableCell>
+                                                <TableCell align="right">
+                                                    {row.busy=='false' ? 'Нет' : row.busy}
+                                                    </TableCell>
                                             </TableRow>
                                         );
                                     })}
@@ -472,4 +524,4 @@ const UserTable = inject('trainerState')(
     }),
 );
 
-export default UserTable;
+export default TrainerTable;

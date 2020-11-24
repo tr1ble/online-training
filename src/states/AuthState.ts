@@ -139,7 +139,7 @@ class AuthState {
           });
           let remember:boolean=true;
           await this.toLogin({login,password,remember});
-          history.goBack();
+          history.push('/');
         } catch (error) {
           this.showAlert("Ошибка регистрации", "register");
         }
