@@ -1,10 +1,11 @@
 package by.bsuir.training.controller.student;
 
-import by.bsuir.training.entites.CompletedTask;
-import by.bsuir.training.entites.Student;
+import by.bsuir.training.entites.*;
 import by.bsuir.training.service.completedtask.CompletedTaskService;
+import by.bsuir.training.service.course.CourseService;
 import by.bsuir.training.service.databasefile.DatabaseFileService;
 import by.bsuir.training.service.student.StudentService;
+import by.bsuir.training.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +14,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
+import java.util.Optional;
 
 
 @RestController
 public class StudentController {
     private final StudentService studentService;
+    private final UserService userService;
+    private final CourseService courseService;
     private final CompletedTaskService completedTaskService;
     private final DatabaseFileService databaseFileService;
 
@@ -25,7 +29,9 @@ public class StudentController {
     private static final String COMPLETED_TASK_ID = "completedTaskId";
 
     @Autowired
-    public StudentController(StudentService studentService, CompletedTaskService completedTaskService, DatabaseFileService databaseFileService) {
+    public StudentController(StudentService studentService, UserService userService, CourseService courseService, CompletedTaskService completedTaskService, DatabaseFileService databaseFileService) {
+        this.userService = userService;
+        this.courseService = courseService;
         this.completedTaskService = completedTaskService;
         this.databaseFileService = databaseFileService;
         this.studentService = studentService;
@@ -34,6 +40,13 @@ public class StudentController {
     @PostMapping(value = {"/registration"}, consumes = "application/json")
     @Secured({"ROLE_DEFAULT"})
     public Student registration(@RequestBody Student student)  {
+        Optional<User> userOptional = userService.getUserByLogin(student.getUser().getLogin());
+        userOptional.ifPresent(u -> {
+            u.setRole(Role.ROLE_STUDENT);
+            student.setUser(u);
+        });
+        Optional<Course> courseOptional = courseService.findById(student.getCourse().getId());
+        courseOptional.ifPresent(student::setCourse);
         return studentService.add(student);
     }
 

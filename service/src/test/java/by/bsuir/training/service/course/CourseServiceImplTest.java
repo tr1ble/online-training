@@ -34,10 +34,10 @@ class CourseServiceImplTest {
 
         Trainer trainer = Mockito.mock(Trainer.class);
         Date date = Mockito.mock(Date.class);
-        Course courseOne = new Course(1, trainer, "one", date, date);
-        Course courseTwo = new Course(2, trainer, "two", date, date);
-        Course courseThree = new Course(3, trainer, "three", date, date);
-        Course courseFour = new Course(4, trainer, "four", date, date);
+        Course courseOne = new Course(1, trainer, "one", "one", date, date);
+        Course courseTwo = new Course(2, trainer, "two", "two", date, date);
+        Course courseThree = new Course(3, trainer, "three", "three", date, date);
+        Course courseFour = new Course(4, trainer, "four", "four",date, date);
 
         expectedCoursesList.add(courseOne);
         expectedCoursesList.add(courseTwo);
@@ -57,8 +57,8 @@ class CourseServiceImplTest {
         Trainer trainer = Mockito.mock(Trainer.class);
 
         Date date = Mockito.mock(Date.class);
-        Course courseOne = new Course(1, trainer, "one", date, date);
-        Course courseTwo = new Course(2, trainer, "two", date, date);
+        Course courseOne = new Course(1, trainer, "one","one", date, date);
+        Course courseTwo = new Course(2, trainer, "two","two", date, date);
 
         courseService.add(courseOne);
         courseService.add(courseTwo);
@@ -75,8 +75,9 @@ class CourseServiceImplTest {
         Date endDate = new SimpleDateFormat("dd-MM-yyyy").parse("01-01-2020");
         int expectedTrainerId = 11;
         String expectedTitle = "one";
+        String expectedDescription = "one";
 
-        Course exptectedCourse = new Course(1, new Trainer(expectedTrainerId), expectedTitle, startDate, endDate);
+        Course exptectedCourse = new Course(1, new Trainer(expectedTrainerId), expectedTitle, expectedDescription, startDate, endDate);
 
         Mockito.when(courseRepository.findById(1)).thenReturn(Optional.of(exptectedCourse));
 
@@ -97,7 +98,7 @@ class CourseServiceImplTest {
     public void updateCourseTest() {
         Trainer trainer = Mockito.mock(Trainer.class);
         Date date = Mockito.mock(Date.class);
-        Course course = new Course(1, trainer, "one", date, date);
+        Course course = new Course(1, trainer, "one", "one", date, date);
         courseService.update(course);
         Mockito.verify(courseRepository, Mockito.times(1)).save(course);
     }

@@ -195,5 +195,19 @@ public class CommonGetController {
                 .body(file + body);
     }
 
+    @GetMapping(value = "/courses/findByCurrentTrainer", produces = {"application/json"})
+    @Secured({"ROLE_TRAINER", "ROLE_STUDENT", "ROLE_DEFAULT", "ROLE_ADMINISTRATOR"})
+    public ResponseEntity<List<Course>> getCoursesByCurrentTrainer(Authentication authentication) {
+        Optional<User> userOptional = userService.getUserByLogin(authentication.getName());
+        if(userOptional.isPresent()) {
+            Optional<Trainer> trainerOptional = trainerService.findByUser(userOptional.get());
+            if(trainerOptional.isPresent()) {
+                List<Course> courses= courseService.findByTrainer(trainerOptional.get());
+                return ResponseEntity.ok(courses);
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 
 }

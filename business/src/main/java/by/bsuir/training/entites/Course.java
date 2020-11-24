@@ -37,6 +37,11 @@ public class Course implements Identifable {
     @NonNull
     private String title;
 
+    @Basic
+    @Column(name = "description", length = 200, nullable = false)
+    @NonNull
+    private String description;
+
     @Column(name = "start_date")
     @Temporal(TemporalType.DATE)
     @NonNull

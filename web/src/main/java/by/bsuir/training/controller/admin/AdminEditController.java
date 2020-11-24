@@ -22,21 +22,15 @@ public class AdminEditController {
 
     private final TrainerService trainerService;
     private final CourseService courseService;
-    private final TaskService taskService;
     private final UserService userService;
-    private final CompletedTaskService completedTaskService;
     private final StudentService studentService;
-    private final RequestService requestService;
 
     @Autowired
-    public AdminEditController(TrainerService trainerService, CourseService courseService, TaskService taskService, UserService userService, CompletedTaskService completedTaskService, StudentService studentService, RequestService requestService) {
-        this.completedTaskService = completedTaskService;
+    public AdminEditController(TrainerService trainerService, CourseService courseService,  UserService userService,  StudentService studentService) {
         this.trainerService = trainerService;
         this.courseService = courseService;
-        this.taskService = taskService;
         this.userService = userService;
         this.studentService = studentService;
-        this.requestService = requestService;
     }
 
     @PutMapping(value = {"/course"}, consumes = "application/json", produces = "application/json")

@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.EntityGraph;
 
+import java.util.Arrays;
+
 
 @SpringBootApplication
 @EntityScan(basePackages = "by.bsuir.training.**")

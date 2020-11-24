@@ -1,21 +1,26 @@
 package by.bsuir.training.controller.trainer;
 
-import by.bsuir.training.entites.CompletedTask;
-import by.bsuir.training.entites.Task;
+import by.bsuir.training.entites.*;
 import by.bsuir.training.entites.files.DatabaseFile;
 import by.bsuir.training.service.completedtask.CompletedTaskService;
+import by.bsuir.training.service.course.CourseService;
 import by.bsuir.training.service.task.TaskService;
+import by.bsuir.training.service.trainer.TrainerService;
+import by.bsuir.training.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -24,12 +29,18 @@ public class TrainerController {
 
     private final CompletedTaskService completedTaskService;
     private final TaskService taskService;
+    private final CourseService courseService;
+    private final UserService userService;
+    private final TrainerService trainerService;
     private static final String TASK_ID = "taskId";
 
     @Autowired
-    public TrainerController(CompletedTaskService completedTaskService, TaskService taskService) {
+    public TrainerController(CompletedTaskService completedTaskService, TaskService taskService, CourseService courseService, UserService userService, TrainerService trainerService) {
         this.completedTaskService = completedTaskService;
         this.taskService = taskService;
+        this.courseService = courseService;
+        this.userService = userService;
+        this.trainerService = trainerService;
     }
 
 
@@ -72,5 +83,6 @@ public class TrainerController {
         taskService.update(task);
         return ResponseEntity.ok(task);
     }
+
 
 }

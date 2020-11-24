@@ -44,7 +44,7 @@ public class AdminAddControllerTest {
     public void addCourseTestShouldBeStatus200AndReturnCourseAsJson() throws Exception {
         String uri = "/course";
 
-        Course course=new Course(1, new Trainer(new User("trainer", "trainer", Role.valueOf("ROLE_TRAINER"))), "description", new Date(), new Date());
+        Course course=new Course(1, new Trainer(new User("trainer", "trainer", Role.valueOf("ROLE_TRAINER"))), "title", "description", new Date(), new Date());
 
         String inputJson = new ObjectMapper().writeValueAsString(course);
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(uri)

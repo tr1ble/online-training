@@ -19,7 +19,7 @@ public class Student extends Man implements Identifable {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_login")
     private User user;
 

@@ -31,7 +31,7 @@ public class Task implements Identifable {
     private Course course;
 
     @Basic
-    @Column(name="task_description", nullable = false, length = 45)
+    @Column(name="description", nullable = false, length = 200)
     @NonNull
     private String description;
 
