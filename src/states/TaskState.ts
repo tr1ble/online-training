@@ -29,6 +29,16 @@ class TaskState {
         this.getAllTasks();
     }
 
+    @action initTasksByCourse = (course:string) => {
+        try {
+            getTasksByCourse(course).then((r)=> {
+                this.tasks=r});
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
     @action clearTasks = async () => {
         this.tasks=[];
     }
@@ -48,7 +58,7 @@ class TaskState {
         deleteTask(task);
     }
 
-    getTasksByCourse = async (course:string) => {
+    @action getTasksByCourse = async (course:string) => {
         const response = await getTasksByCourse(course);
         return response;
     }

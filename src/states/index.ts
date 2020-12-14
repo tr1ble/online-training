@@ -3,6 +3,7 @@ import ProfileState from "./ProfileState";
 import UserState from "./UserState";
 import TrainerState from "./TrainerState";
 import CourseState from "./CourseState";
+import CompletedTaskState from "./CompletedTaskState";
 import StudentState from "./StudentState";
 import TaskState from "./TaskState";
 
@@ -14,6 +15,7 @@ class Store {
   courseState = new CourseState();
   studentState = new StudentState();
   taskState = new TaskState();
+  completedTaskState = new CompletedTaskState();
 }
 
 const store = new Store();

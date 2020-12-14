@@ -1,4 +1,4 @@
-import { deleteStudent, getAllStudents, updateStudent, addStudent, getStudentsByCourse, registerStudent } from "api/students";
+import { deleteStudent, getAllStudents, updateStudent, addStudent, getStudentsByCourse, registerStudent, getStudentByUser } from "api/students";
 import { action, configure, observable, runInAction } from "mobx";
 
 configure({enforceActions: 'observed'})
@@ -31,9 +31,25 @@ class StudentState {
     
     @observable students:Student[]=[];
     @observable selected_course: Course = new Course('0', 'empty');
+    @observable myCourse: any = '';
+    @observable currentStudent: any = false;
 
     @action initStudents = () => {
         this.getAllStudents();
+    }
+
+    @action initCurrentStudentByUser = (login: string) => {
+        this.getCurrentStudentByUser(login);
+    }
+
+    @action initStudentsByCourse = (course: string) => {
+        try {
+            getStudentsByCourse(course).then((r)=> {
+                this.students = r;
+            });
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     @action clearStudents = async () => {
@@ -64,6 +80,17 @@ class StudentState {
             const response = await getAllStudents();
             runInAction(() => {
                 this.students = response;
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    @action getCurrentStudentByUser = (user:string) => {
+        try {
+            getStudentByUser(user).then((r)=> {
+                this.currentStudent = r;
+                this.myCourse = r.course;
             });
         } catch (error) {
             console.log(error);

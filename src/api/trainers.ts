@@ -28,6 +28,12 @@ export async function getTrainersByBusy(busy:string) {
     return response.data;
 }
 
+export async function getCurrentTrainer() {
+    const instance = await getInstance();
+    const response = await instance.get('/trainers/findCurrentTrainer/', {});
+    return response.data;
+}
+
 
 export async function updateTrainer(trainer:Trainer) {
     const instance = await getInstance();

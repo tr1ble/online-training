@@ -1,5 +1,5 @@
 import { getCoursesByTrainer } from "api/courses";
-import { deleteTrainer, getAllTrainers, updateTrainer, addTrainer, getTrainersByBusy } from "api/trainers";
+import { deleteTrainer, getAllTrainers, updateTrainer, addTrainer, getTrainersByBusy, getCurrentTrainer } from "api/trainers";
 import { action, configure, observable, runInAction } from "mobx";
 
 configure({enforceActions: 'observed'})
@@ -23,10 +23,19 @@ interface Trainer {
 class TrainerState {
     
     @observable trainers:Trainer[]=[];
+    @observable myCourse: any = '';
+    @observable currentTrainer: any = false;
+
 
     @action initTrainers = () => {
         this.getAllTrainers();
     }
+
+    @action initCurrentTrainer = () => {
+        this.getCurrentTrainer();
+    }
+
+
 
     @action clearTrainers = async () => {
         this.trainers=[];
@@ -57,6 +66,20 @@ class TrainerState {
             console.log(error);
         }
     }
+
+    @action getCurrentTrainer = () => {
+        try {
+            getCurrentTrainer().then((r:any)=> {
+                this.currentTrainer = r;
+                getCoursesByTrainer(r.id).then((res)=> {
+                    this.myCourse = res[0];
+                });
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
 
     getTrainersByBusy = async (busy:string) => {
         const response = await getTrainersByBusy(busy);

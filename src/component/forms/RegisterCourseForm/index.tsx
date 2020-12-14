@@ -36,11 +36,13 @@ class RegisterStudentForm extends React.PureComponent<RegisterStudentProps> {
         ValidatorForm.removeValidationRule('numbersNotAllowed');
     }
  
-
+    @action
     onSubmit = () => {
             const { studentState } = this.props;
             const { login } = this.props.authState;
             studentState.registerStudent({surname:this.surname,secondname:this.secondname,firstname:this.firstname,user: { login:login }, course: { id: this.props.selected }});
+            localStorage.setItem("role", 'ROLE_STUDENT');
+            this.props.authState.role='ROLE_STUDENT';
             history.push('/training');
     };
 

@@ -332,7 +332,6 @@ const UserTable = inject('taskState')(
 
         taskState.getCoursesByCurrentTrainer().then(function(result) {
             setCourse(result[0]);
-            alert(result[0])
         });
 
         const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {

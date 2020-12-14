@@ -60,6 +60,11 @@ class CourseState {
         }
     }
 
+    getCoursesByCurrentTrainer = async () => {
+        const response = await getAllCourses();
+        return response;
+    }
+
 }
 
 export default CourseState;

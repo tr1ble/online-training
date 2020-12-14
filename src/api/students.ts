@@ -38,6 +38,12 @@ export async function getStudentsByCourse(course:string) {
     return response.data;
 }
 
+export async function getStudentByUser(user:string) {
+    const instance = await getInstance();
+    const response = await instance.get('/students/findByUser/'+user, {});
+    return response.data;
+}
+
 
 export async function updateStudent(student:Student) {
     const instance = await getInstance();

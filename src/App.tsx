@@ -29,6 +29,10 @@ class App extends React.PureComponent<AppProps> {
           break;
         case('ROLE_DEFAULT'):
           actualRoutes = routes.defaultRoutes;
+          break;
+        case('ROLE_STUDENT'):
+          actualRoutes = routes.studentRoutes;
+          break;
       }
     }
 
