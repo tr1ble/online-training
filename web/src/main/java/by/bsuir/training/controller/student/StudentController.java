@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -85,10 +87,32 @@ public class StudentController {
     }
 
     @DeleteMapping(value = {"/completedTask/{completedTaskId}"})
+    @Secured({"ROLE_STUDENT", "ROLE_TRAINER"})
     public ResponseEntity<Integer> deleteCompletedTask(@PathVariable(COMPLETED_TASK_ID) int completedTaskId) {
         completedTaskService.remove(completedTaskId);
         return ResponseEntity.ok(completedTaskId);
     }
+
+    @GetMapping(value = "/students/findByUser/{username}", produces = {"application/json"})
+    @Secured("ROLE_STUDENT")
+    public ResponseEntity<Student> getStudentByUser(@PathVariable String username) {
+        User user = new User(username);
+        Optional<Student> studentOptional = studentService.findCurrentStudentByUser(user);
+        return studentOptional.map(student -> new ResponseEntity<>(student, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping(value = "/completedTasks/findByCurrentUser/", produces = {"application/json"})
+    @Secured("ROLE_STUDENT")
+    public ResponseEntity<List<CompletedTask>> getCompletedTasksByCurrentUser(Authentication authentication) {
+        User user = new User(authentication.getName());
+        Optional<Student> studentOptional = studentService.findCurrentStudentByUser(user);
+        if(studentOptional.isPresent()) {
+            List<CompletedTask> completedTasks = completedTaskService.findByStudent(studentOptional.get());
+            return new ResponseEntity<>(completedTasks, HttpStatus.OK);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 
 
 

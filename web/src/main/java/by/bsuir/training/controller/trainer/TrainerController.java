@@ -51,10 +51,11 @@ public class TrainerController {
         Optional<CompletedTask> completedTask = completedTaskService.findById(completedTaskId);
 
         if (completedTask.isPresent()) {
-            DatabaseFile databaseFile = completedTask.get().getDatabaseFile();
+            DatabaseFile databaseFile = completedTask.get().getFile();
             return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(databaseFile.getFileType()))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + databaseFile.getFileName() + "\"")
+                    .header("X-Suggested-Filename", databaseFile.getFileName())
                 .body(new ByteArrayResource(databaseFile.getData()));
         } else {
             return ResponseEntity.notFound().build();
@@ -84,5 +85,18 @@ public class TrainerController {
         return ResponseEntity.ok(task);
     }
 
+    @GetMapping(value = "/trainers/findCurrentTrainer", produces = {"application/json"})
+    @Secured({"ROLE_TRAINER"})
+    public ResponseEntity<Trainer> getCoursesByCurrentTrainer(Authentication authentication) {
+        Optional<User> userOptional = userService.getUserByLogin(authentication.getName());
+        if(userOptional.isPresent()) {
+            System.out.println(userOptional.get());
+            Optional<Trainer> trainerOptional = trainerService.findByUser(userOptional.get());
+            if(trainerOptional.isPresent()) {
+                return ResponseEntity.ok(trainerOptional.get());
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
 
 }

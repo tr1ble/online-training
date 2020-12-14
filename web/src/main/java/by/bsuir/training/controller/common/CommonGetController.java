@@ -75,8 +75,13 @@ public class CommonGetController {
 
     @GetMapping(value = "/completedtasks/findByCourse/{id}", produces = {"application/json"})
     public ResponseEntity<List<CompletedTask>> getCompletedTasksByCourse(@PathVariable int id) {
-        Optional<Task> taskOptional = taskService.findById(id);
-        return taskOptional.map(task -> ResponseEntity.ok(completedTaskService.findByTask(task))).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        Optional<CompletedTask> completedTaskOptional = completedTaskService.findById(id);
+        if(completedTaskOptional.isPresent()) {
+            Optional<Task> taskOptional = taskService.findById(completedTaskOptional.get().getTask().getId());
+            return taskOptional.map(task -> ResponseEntity.ok(completedTaskService.findByTask(task))).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 
@@ -149,13 +154,6 @@ public class CommonGetController {
         return courseOptional.map(course -> ResponseEntity.ok(studentService.findByCourse(course))).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping(value = "/students/findByUser/{username}", produces = {"application/json"})
-    public ResponseEntity<Student> getStudentByUser(@PathVariable String username) {
-        User user = new User(username);
-        Optional<Student> studentOptional = studentService.findCurrentStudentByUser(user);
-        return studentOptional.map(student -> new ResponseEntity<>(student, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
     @GetMapping(value = "/students/findByFio/{surname}&{firstname}&{secondname}", produces = {"application/json"})
     public ResponseEntity<Student> getStudentByFio(@PathVariable String surname, @PathVariable String firstname, @PathVariable String secondname) {
         Optional<Student> studentOptional = studentService.findByFio(surname, firstname, secondname);
@@ -196,7 +194,7 @@ public class CommonGetController {
     }
 
     @GetMapping(value = "/courses/findByCurrentTrainer", produces = {"application/json"})
-    @Secured({"ROLE_TRAINER", "ROLE_STUDENT", "ROLE_DEFAULT", "ROLE_ADMINISTRATOR"})
+    @Secured({"ROLE_TRAINER"})
     public ResponseEntity<List<Course>> getCoursesByCurrentTrainer(Authentication authentication) {
         Optional<User> userOptional = userService.getUserByLogin(authentication.getName());
         if(userOptional.isPresent()) {

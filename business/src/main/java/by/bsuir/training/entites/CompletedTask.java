@@ -23,13 +23,13 @@ public class CompletedTask {
    private int id;
 
    @Basic
-   @Column(name="mark", nullable = false)
+   @Column(name="mark")
    @Min(0)
    @Max(10)
    private double mark;
 
    @Basic
-   @Column(name="feedback", nullable = false)
+   @Column(name="feedback")
    private String feedback;
 
    @ManyToOne
@@ -40,7 +40,7 @@ public class CompletedTask {
    @OneToOne
    @JoinColumn(name="file_id")
    @OnDelete(action = OnDeleteAction.CASCADE)
-   private DatabaseFile databaseFile;
+   private DatabaseFile file;
 
    @ManyToOne
    @JoinColumn(name="task_id")
